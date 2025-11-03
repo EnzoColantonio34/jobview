@@ -1,13 +1,32 @@
 {
   "name": "ui",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "shadcn:init": "shadcn-ui init",
+    "docker:dev": "docker compose -f docker-compose.yml up --remove-orphans ui-dev",
+    "docker:prod": "docker compose -f docker-compose.yml up --build --remove-orphans ui-prod",
+    "docker:build": "docker compose -f docker-compose.yml build ui-prod"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.13.1",
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "shadcn-ui": "^0.1.3",
+    "tailwindcss": "^4.1.16",
+    "vite": "^5.4.21"
+  }
 }

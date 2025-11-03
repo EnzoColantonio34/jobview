@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  # Development service: runs Vite dev server with host mounting for HMR
+  ui-dev:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./:/app:delegated
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      # Enable polling on some macOS setups; optional
+      - CHOKIDAR_USEPOLLING=true
+    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install --prefer-frozen-lockfile && pnpm dev --host"
+    tty: true
+
+  # Production service: build then serve with nginx
+  ui-prod:
+    build:
+      context: .
+      target: runner
+    ports:
+      - "5173:80"
+    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge
