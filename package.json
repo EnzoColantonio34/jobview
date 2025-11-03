@@ -1,0 +1,17 @@
+{
+  "name": "jobview",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  
+  "scripts": {
+    "dev:api": "pnpm --filter api run start",
+    "dev:ui": "pnpm --filter ui run dev",
+    "dev": "pnpm -r run dev"
+  },
+
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1"
+}
