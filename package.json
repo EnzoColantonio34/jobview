@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  
   "scripts": {
   "dev:api": "pnpm --filter api run start",
   "dev:ui": "pnpm --filter ui run dev",
@@ -11,9 +10,8 @@
   "start": "pnpm -w -r --parallel --filter api --filter ui run start",
   "build": "pnpm -w -r --parallel --filter api --filter ui run build"
   },
-
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.20.0"
 }

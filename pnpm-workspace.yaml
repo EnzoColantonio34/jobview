@@ -1,3 +1,8 @@
 packages:
-  - 'api'
-  - 'ui'
+  - api
+  - ui
+
+ignoredBuiltDependencies:
+  - '@nestjs/core'
+  - esbuild
+  - unrs-resolver
