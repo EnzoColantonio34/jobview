@@ -5,10 +5,11 @@
   "main": "index.js",
   
   "scripts": {
-    "dev:api": "pnpm --filter api run start",
-    "dev:ui": "pnpm --filter ui run dev",
-    "dev": "pnpm -r run dev",
-    "start": "pnpm -r run start"
+  "dev:api": "pnpm --filter api run start",
+  "dev:ui": "pnpm --filter ui run dev",
+  "dev": "pnpm -r run dev",
+  "start": "pnpm -w -r --parallel --filter api --filter ui run start",
+  "build": "pnpm -w -r --parallel --filter api --filter ui run build"
   },
 
   "keywords": [],
