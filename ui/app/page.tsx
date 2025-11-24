@@ -37,9 +37,9 @@ export default function Home() {
       <AppHeader />
       <div className="flex flex-1">
         <AppSidebar activeTab={activeTab} onTabChange={setActiveTab} />
-        <main className="flex-1 overflow-auto md:ml-64">
+        <main className="flex-1 overflow-auto">
           <div className="h-full p-6 md:p-8">
-            <div className="max-w-7xl h-full">{renderContent()}</div>
+            <div className="max-w-7xl h-full mx-auto">{renderContent()}</div>
           </div>
         </main>
       </div>
