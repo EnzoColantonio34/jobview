@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ChatContainer, type Message } from "@/components/chat/chat-container"
 import { ChatInput } from "@/components/chat/chat-input"
+import { ChatWelcome } from "@/components/chat/chat-welcome"
 import { THEME_TEMPLATES } from "@/config/theme-templates"
 
 const interviewQuestions = [
@@ -23,21 +24,11 @@ export function LLMChat() {
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    if (messages.length === 0) {
-      const randomQuestion = interviewQuestions[Math.floor(Math.random() * interviewQuestions.length)]
-      const initialMessage: Message = {
-        id: "1",
-        role: "assistant",
-        content: randomQuestion,
-      }
-      setMessages([initialMessage])
-    }
-  }, [])
-
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
+
+    const isFirstMessage = messages.length === 0
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -53,7 +44,7 @@ export function LLMChat() {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: `Bonne réponse! Voici ma question suivante: ${randomQuestion}`,
+        content: isFirstMessage ? randomQuestion : `Bonne réponse! Voici ma question suivante: ${randomQuestion}`,
       }
       setMessages((prev) => [...prev, assistantMessage])
       setIsLoading(false)
@@ -61,16 +52,32 @@ export function LLMChat() {
   }
 
   return (
-    <div
-      className={`flex h-[70vh] flex-col rounded-lg border border-border bg-card mx-auto max-w-4xl ${THEME_TEMPLATES.animation.fadeIn}`}
-    >
-      <ChatContainer messages={messages} isLoading={isLoading} />
-      <ChatInput
-        value={input}
-        onChange={setInput}
-        onSubmit={handleSend}
-        isLoading={isLoading}
-      />
+    <div className={`mx-auto max-w-4xl ${THEME_TEMPLATES.animation.fadeIn}`}>
+      {messages.length === 0 ? (
+        <div className="flex h-[70vh] flex-col items-center justify-center space-y-8">
+          <ChatWelcome />
+          <div className="w-full max-w-2xl px-6">
+            <ChatInput
+              value={input}
+              onChange={setInput}
+              onSubmit={handleSend}
+              isLoading={isLoading}
+              placeholder="Envoyer votre réponse..."
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="flex h-[70vh] flex-col rounded-lg border border-border bg-card">
+          <ChatContainer messages={messages} isLoading={isLoading} />
+          <ChatInput
+            value={input}
+            onChange={setInput}
+            onSubmit={handleSend}
+            isLoading={isLoading}
+            placeholder="Votre réponse..."
+          />
+        </div>
+      )}
     </div>
   )
 }
