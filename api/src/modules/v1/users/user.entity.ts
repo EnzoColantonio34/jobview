@@ -3,7 +3,9 @@ import {
     PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
+    OneToMany,
 } from 'typeorm';
+import { Company } from '../companies/company.entity';
 
 @Entity('users')
 export class User {
@@ -38,7 +40,7 @@ export class User {
     @Column({ type: 'varchar', nullable: true })
     currentHashedRefreshToken: string | null;
 
-    // Relations
-    // @OneToMany(() => Mood, (mood) => mood.user)
-    // moods: Mood[];
+    // Un User -> Plusieurs Companies
+    @OneToMany(() => Company, (company) => company.user)
+    companies: Company[];
 }
