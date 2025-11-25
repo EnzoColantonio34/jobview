@@ -1,29 +1,25 @@
 "use client"
 
-import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { navItems } from "./nav-items.config"
-import { MobileMenuButton } from "./mobile-menu-button"
 import { SidebarNavItem } from "./sidebar-nav-item"
 import { MobileOverlay } from "./mobile-overlay"
 
 interface AppSidebarProps {
   activeTab: string
   onTabChange: (tabId: string) => void
+  isOpen: boolean
+  onClose: () => void
 }
 
-export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
-  const [isOpen, setIsOpen] = useState(true)
-
+export function AppSidebar({ activeTab, onTabChange, isOpen, onClose }: AppSidebarProps) {
   const handleNavItemClick = (itemId: string) => {
     onTabChange(itemId)
-    setIsOpen(false)
+    onClose()
   }
 
   return (
     <>
-      <MobileMenuButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
-
       <aside
         className={cn(
           "border-r border-border bg-sidebar transition-all duration-300 ease-out",
@@ -43,7 +39,7 @@ export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
         </nav>
       </aside>
 
-      <MobileOverlay isOpen={isOpen} onClick={() => setIsOpen(false)} />
+      <MobileOverlay isOpen={isOpen} onClick={onClose} />
     </>
   )
 }
