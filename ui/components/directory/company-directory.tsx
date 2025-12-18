@@ -6,9 +6,11 @@ import { THEME_TEMPLATES } from "@/config/theme-templates"
 import { CompanySearchBar } from "@/components/directory/company-search-bar"
 import { CompanyCard } from "@/components/directory/company-card"
 import { CompanySummary } from "@/components/directory/company-summary"
+import { useTranslation } from "react-i18next"
 import { type Company, filterCompaniesByName } from "@/lib/company-utils"
 
 export function CompanyDirectory() {
+  const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState("")
   const [companies, setCompanies] = useState<Company[]>([
     {
@@ -68,7 +70,7 @@ export function CompanyDirectory() {
       <div className="space-y-3">
         {filteredCompanies.length === 0 ? (
           <Card className={`${THEME_TEMPLATES.card.base} p-8 text-center`}>
-            <p className={THEME_TEMPLATES.text.muted}>Aucune entreprise trouvée</p>
+            <p className={THEME_TEMPLATES.text.muted}>{t("company.noCompaniesFound")}</p>
           </Card>
         ) : (
           filteredCompanies.map((company) => (

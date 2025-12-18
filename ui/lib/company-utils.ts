@@ -23,18 +23,15 @@ export function getStatusColor(status: CompanyStatus): string {
   }
 }
 
-export function getStatusLabel(status: CompanyStatus): string {
-  switch (status) {
-    case "interview":
-      return "Entretien"
-    case "offer":
-      return "Offre"
-    case "rejected":
-      return "Rejeté"
-    case "contacted":
-    default:
-      return "Contacté"
-  }
+export const COMPANY_STATUS_LABEL_KEYS = {
+  contacted: "company.status.contacted",
+  interview: "company.status.interview",
+  rejected: "company.status.rejected",
+  offer: "company.status.offer",
+} as const
+
+export function getStatusLabelKey(status: CompanyStatus) {
+  return COMPANY_STATUS_LABEL_KEYS[status]
 }
 
 export function filterCompaniesByName(companies: Company[], searchTerm: string): Company[] {

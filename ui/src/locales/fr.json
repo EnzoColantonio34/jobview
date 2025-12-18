@@ -1,0 +1,137 @@
+{
+  "common": {
+    "back": "Retour"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Gérez votre compte, vos préférences et vos paramètres",
+    "menu": {
+      "account": "Compte",
+      "notifications": "Notifications",
+      "language": "Langue",
+      "billing": "Facturation"
+    },
+    "language": {
+      "interfaceTitle": "Langue de l'interface",
+      "interfaceDescription": "Choisissez la langue d'affichage de l'application",
+      "french": "Français",
+      "english": "Anglais",
+      "applyInfo": "La langue sera appliquée à toute l'interface"
+    },
+    "account": {
+      "profilePictureTitle": "Photo de profil",
+      "profilePictureDescription": "Changez votre avatar ou photo de profil",
+      "changeAvatar": "Changer l'avatar",
+      "avatarInfo": "JPG, PNG ou GIF. Max 5MB.",
+      "emailTitle": "Adresse email",
+      "emailDescription": "Modifiez votre adresse email",
+      "newEmailLabel": "Nouvelle adresse email",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "currentEmailInfo": "Votre adresse email actuelle",
+      "edit": "Modifier",
+      "passwordTitle": "Mot de passe",
+      "passwordDescription": "Modifiez votre mot de passe",
+      "changePassword": "Changer le mot de passe",
+      "dangerZoneTitle": "Zone de danger",
+      "dangerZoneDescription": "Supprimez définitivement votre compte",
+      "deleteAccount": "Supprimer mon compte",
+      "deleteConfirmTitle": "Êtes-vous absolument sûr ?",
+      "deleteConfirmDescription": "Cette action est irréversible. Cela supprimera définitivement votre compte et toutes vos données de nos serveurs.",
+      "confirmDelete": "Confirmer la suppression"
+    },
+    "notifications": {
+      "emailTitle": "Notifications par email",
+      "emailDescription": "Recevez des notifications par email",
+      "emailLabel": "Activer les notifications email",
+      "emailInfo": "Recevez des emails pour les événements importants",
+      "pushTitle": "Notifications push web",
+      "pushDescription": "Recevez des notifications dans votre navigateur",
+      "pushLabel": "Activer les notifications push",
+      "pushInfo": "Recevez des alertes en temps réel pour les nouveaux événements",
+      "inAppTitle": "Notifications dans l'application",
+      "inAppDescription": "Recevez des notifications dans l'application",
+      "inAppLabel": "Activer les notifications dans l'application",
+      "inAppInfo": "Affichez les notifications dans l'interface"
+    },
+    "billing": {
+      "currentPlanTitle": "Plan actuel",
+      "currentPlanDescription": "Détails de votre abonnement en cours.",
+      "currentPlanStatus": "Actif",
+      "currentPlanPrice": "29,99€/mois",
+      "currentPlanRenewal": "Prochain renouvellement : 24 décembre 2025",
+      "changePlan": "Changer de plan",
+      "paymentMethodTitle": "Méthode de paiement",
+      "paymentMethodDescription": "Gérez vos méthodes de paiement enregistrées.",
+      "paymentMethodEdit": "Modifier",
+      "paymentMethodAdd": "Ajouter une méthode de paiement",
+      "manageSubscriptionsTitle": "Gérer les abonnements",
+      "manageSubscriptionsDescription": "Gérez vos abonnements actifs",
+      "pauseSubscription": "Mettre en pause mon abonnement",
+      "cancelSubscription": "Résilier mon abonnement",
+      "billingHistoryTitle": "Historique de facturation",
+      "billingHistoryDescription": "Consultez vos factures passées",
+      "download": "Télécharger"
+    }
+  },
+  "nav": {
+    "chat": "Chat LLM",
+    "calendar": "Calendrier",
+    "interviews": "Entretiens",
+    "directory": "Annuaire",
+    "cv": "Télécharger mon CV"
+    },
+    "userMenu": {
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "logout": "Se déconnecter"
+  },
+  "chat": {
+    "welcomeTitle": "Prêt pour votre entretien ?",
+    "welcomeDescription": "Expliquez-moi le contexte de votre entretien et je vous poserai des questions pour vous aider à vous préparer.",
+    "firstInputPlaceholder": "Envoyez votre réponse...",
+    "inputPlaceholder": "Votre réponse..."
+  },
+  "calendar": {
+    "daysOfWeek": {
+      "monday": "Lun",
+      "tuesday": "Mar",
+      "wednesday": "Mer",
+      "thursday": "Jeu",
+      "friday": "Ven",
+      "saturday": "Sam",
+      "sunday": "Dim"
+    }
+  },
+  "upcomingInterviews": {
+    "title": "Mes entretiens",
+    "add": "Ajouter",
+    "noInterviews": "Aucun entretien prévu"
+  },
+  "stats": {
+    "cvSent": "CV Envoyés",
+    "interviews": "Entretiens",
+    "responseRate": "Taux de réponse",
+    "cvSentAndResponses": "CV Envoyés & Réponses",
+    "responses": "Réponses",
+    "typesOfInterviews": "Types d'Entretiens",
+    "applicationStatus": "État des Candidatures"
+  },
+  "company": {
+    "noCompaniesFound": "Aucune entreprise trouvée",
+    "searchPlaceholder": "Rechercher une entreprise...",
+    "add": "Ajouter",
+    "website": "Site web",
+    "contactedOn": "Contacté le",
+    "total": "Total",
+    "interviews": "Entretiens",
+    "offers": "Offres",
+    "rejected": "Rejetés",
+    "status": {
+      "interview": "Entretien",
+      "offer": "Offre",
+      "rejected": "Rejeté",
+      "contacted": "Contacté"
+    }
+  }
+}

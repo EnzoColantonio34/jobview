@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { User, Settings, LogOut } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 interface UserProfileProps {
   initials?: string
@@ -17,6 +18,7 @@ interface UserProfileProps {
 
 export function UserProfile({ initials = "EC" }: UserProfileProps) {
   const router = useRouter()
+  const { t } = useTranslation()
 
   return (
     <DropdownMenu>
@@ -33,14 +35,14 @@ export function UserProfile({ initials = "EC" }: UserProfileProps) {
           onClick={() => router.push("/profile")}
         >
           <User />
-          Mon profil
+          {t("userMenu.profile")}
         </DropdownMenuItem>
         <DropdownMenuItem 
           className="cursor-pointer hover:bg-muted focus:bg-muted hover:text-foreground focus:text-foreground"
           onClick={() => router.push("/settings")}
         >
           <Settings />
-          Paramètres
+          {t("userMenu.settings")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem 
@@ -52,7 +54,7 @@ export function UserProfile({ initials = "EC" }: UserProfileProps) {
           }}
         >
           <LogOut />
-          Se déconnecter
+          {t("userMenu.logout")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

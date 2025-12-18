@@ -4,8 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CreditCard, DollarSign, Pause, X } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 export function BillingSettings() {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-6">
       {/* Plan actuel */}
@@ -13,10 +16,10 @@ export function BillingSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
-            Plan actuel
+            {t("settings.billing.currentPlanTitle")}
           </CardTitle>
           <CardDescription>
-            Gérez votre abonnement et votre plan
+            {t("settings.billing.currentPlanDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -24,16 +27,16 @@ export function BillingSettings() {
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-lg font-semibold">Plan Pro</h3>
-                <Badge className="bg-gradient-to-r from-primary to-secondary">Actif</Badge>
+                <Badge className="bg-gradient-to-r from-primary to-secondary">{t("settings.billing.currentPlanStatus")}</Badge>
               </div>
               <p className="text-sm text-muted-foreground mt-1">
-                29,99€ / mois
+                {t("settings.billing.currentPlanPrice")}
               </p>
               <p className="text-xs text-muted-foreground mt-2">
                 Prochain renouvellement : 24 décembre 2025
               </p>
             </div>
-            <Button variant="outline">Changer de plan</Button>
+            <Button variant="outline">{t("settings.billing.changePlan")}</Button>
           </div>
         </CardContent>
       </Card>
@@ -43,10 +46,10 @@ export function BillingSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5 text-primary" />
-            Méthode de paiement
+            {t("settings.billing.paymentMethodTitle")}
           </CardTitle>
           <CardDescription>
-            Gérez vos moyens de paiement
+            {t("settings.billing.paymentMethodDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -60,10 +63,10 @@ export function BillingSettings() {
                 <p className="text-xs text-muted-foreground">Expire 12/2026</p>
               </div>
             </div>
-            <Button variant="outline" size="sm">Modifier</Button>
+            <Button variant="outline" size="sm">{t("settings.billing.paymentMethodEdit")}</Button>
           </div>
           <Button variant="outline" className="w-full">
-            Ajouter une méthode de paiement
+            {t("settings.billing.paymentMethodAdd")}
           </Button>
         </CardContent>
       </Card>
@@ -71,20 +74,20 @@ export function BillingSettings() {
       {/* Gérer les abonnements */}
       <Card>
         <CardHeader>
-          <CardTitle>Gérer les abonnements</CardTitle>
+          <CardTitle>{t("settings.billing.manageSubscriptionsTitle")}</CardTitle>
           <CardDescription>
-            Gérez vos abonnements actifs
+            {t("settings.billing.manageSubscriptionsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <Button variant="outline" className="w-full justify-start gap-2">
               <Pause className="h-4 w-4" />
-              Mettre en pause mon abonnement
+              {t("settings.billing.pauseSubscription")}
             </Button>
             <Button variant="outline" className="w-full justify-start gap-2 text-destructive hover:text-destructive">
               <X className="h-4 w-4" />
-              Résilier mon abonnement
+              {t("settings.billing.cancelSubscription")}
             </Button>
           </div>
         </CardContent>
@@ -93,9 +96,9 @@ export function BillingSettings() {
       {/* Historique de facturation */}
       <Card>
         <CardHeader>
-          <CardTitle>Historique de facturation</CardTitle>
+          <CardTitle>{t("settings.billing.billingHistoryTitle")}</CardTitle>
           <CardDescription>
-            Consultez vos factures passées
+            {t("settings.billing.billingHistoryDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -114,7 +117,7 @@ export function BillingSettings() {
                   <Badge variant="outline" className="text-xs">
                     {invoice.status}
                   </Badge>
-                  <Button variant="ghost" size="sm">Télécharger</Button>
+                  <Button variant="ghost" size="sm">{t("settings.billing.download")}</Button>
                 </div>
               </div>
             ))}

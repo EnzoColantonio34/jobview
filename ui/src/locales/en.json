@@ -1,0 +1,137 @@
+{
+  "common": {
+    "back": "Back"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account, preferences, and settings",
+    "menu": {
+      "account": "Account",
+      "notifications": "Notifications",
+      "language": "Language",
+      "billing": "Billing"
+    },
+    "language": {
+      "interfaceTitle": "Interface Language",
+      "interfaceDescription": "Choose the display language of the application",
+      "french": "French",
+      "english": "English",
+      "applyInfo": "The language will be applied to the entire interface"
+    },
+    "account": {
+      "profilePictureTitle": "Profile Picture",
+      "profilePictureDescription": "Change your avatar or profile picture",
+      "changeAvatar": "Change Avatar",
+      "avatarInfo": "JPG, PNG, or GIF. Max 5MB.",
+      "emailTitle": "Email Address",
+      "emailDescription": "Update your email address",
+      "newEmailLabel": "New Email Address",
+      "save": "Save",
+      "cancel": "Cancel",
+      "currentEmailInfo": "Your current email address",
+      "edit": "Edit",
+      "passwordTitle": "Password",
+      "passwordDescription": "Update your password",
+      "changePassword": "Change Password",
+      "dangerZoneTitle": "Danger Zone",
+      "dangerZoneDescription": "Permanently delete your account",
+      "deleteAccount": "Delete My Account",
+      "deleteConfirmTitle": "Are you absolutely sure?",
+      "deleteConfirmDescription": "This action is irreversible. It will permanently delete your account and all your data from our servers.",
+      "confirmDelete": "Confirm Deletion"
+    },
+    "notifications": {
+      "emailTitle": "Email Notifications",
+      "emailDescription": "Receive notifications by email",
+      "emailLabel": "Enable email notifications",
+      "emailInfo": "Receive emails for important events",
+      "pushTitle": "Web Push Notifications",
+      "pushDescription": "Receive notifications in your browser",
+      "pushLabel": "Enable push notifications",
+      "pushInfo": "Get real-time alerts for new events",
+      "inAppTitle": "In-app Notifications",
+      "inAppDescription": "Receive notifications in the app",
+      "inAppLabel": "Enable in-app notifications",
+      "inAppInfo": "Show notifications in the interface"
+    },
+    "billing": {
+      "currentPlanTitle": "Current Plan",
+      "currentPlanDescription": "Details about your current subscription plan.",
+      "currentPlanStatus": "Active",
+      "currentPlanPrice": "$29.99/month",
+      "currentPlanRenewal": "Next renewal: December 24, 2025",
+      "changePlan": "Change Plan",
+      "paymentMethodTitle": "Payment Method",
+      "paymentMethodDescription": "Manage your saved payment methods.",
+      "paymentMethodEdit": "Edit",
+      "paymentMethodAdd": "Add Payment Method",
+      "manageSubscriptionsTitle": "Manage Subscriptions",
+      "manageSubscriptionsDescription": "Manage your active subscriptions",
+      "pauseSubscription": "Pause My Subscription",
+      "cancelSubscription": "Cancel My Subscription",
+      "billingHistoryTitle": "Billing History",
+      "billingHistoryDescription": "View your past invoices",
+      "download": "Download"
+    }
+  },
+  "nav": {
+    "chat": "LLM Chat",
+    "calendar": "Calendar",
+    "interviews": "Interviews",
+    "directory": "Directory",
+    "cv": "Download my CV"
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Log out"
+  },
+  "chat": {
+    "welcomeTitle": "Ready for your interview?",
+    "welcomeDescription": "Explain the context of your interview and I will ask you questions to help you prepare.",
+    "firstInputPlaceholder": "Send your answer...",
+    "inputPlaceholder": "Your answer..."
+  },
+  "calendar": {
+    "daysOfWeek": {
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat",
+      "sunday": "Sun"
+    }
+  },
+  "upcomingInterviews": {
+    "title": "My Interviews",
+    "add": "Add",
+    "noInterviews": "No interviews scheduled"
+  },
+  "stats": {
+    "cvSent": "CVs Sent",
+    "interviews": "Interviews",
+    "responseRate": "Response Rate",
+    "cvSentAndResponses": "CVs Sent & Responses",
+    "responses": "Responses",
+    "typesOfInterviews": "Types of Interviews",
+    "applicationStatus": "Application Status"
+  },
+  "company": {
+    "noCompaniesFound": "No companies found",
+    "searchPlaceholder": "Search for a company...",
+    "add": "Add",
+    "website": "Website",
+    "contactedOn": "Contacted on",
+    "total": "Total",
+    "interviews": "Interviews",
+    "offers": "Offers",
+    "rejected": "Rejected",
+    "status": {
+      "interview": "Interview",
+      "offer": "Offer",
+      "rejected": "Rejected",
+      "contacted": "Contacted"
+    }
+  }
+}

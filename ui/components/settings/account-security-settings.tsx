@@ -8,22 +8,24 @@ import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Camera, Mail, Lock, Trash2 } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 export function AccountSecuritySettings() {
+  const { t } = useTranslation()
   const [email, setEmail] = useState("enzo.colantonio@example.com")
   const [isEditingEmail, setIsEditingEmail] = useState(false)
 
   return (
     <div className="space-y-6">
-      {/* Avatar / Photo de profil */}
+      {/* Avatar / Profile picture */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Camera className="h-5 w-5 text-primary" />
-            Photo de profil
+            {t("settings.account.profilePictureTitle")}
           </CardTitle>
           <CardDescription>
-            Changez votre avatar ou photo de profil
+            {t("settings.account.profilePictureDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -35,9 +37,9 @@ export function AccountSecuritySettings() {
               </AvatarFallback>
             </Avatar>
             <div className="space-y-2">
-              <Button variant="outline">Changer l'avatar</Button>
+              <Button variant="outline">{t("settings.account.changeAvatar")}</Button>
               <p className="text-xs text-muted-foreground">
-                JPG, PNG ou GIF. Max 5MB.
+                {t("settings.account.avatarInfo")}
               </p>
             </div>
           </div>
@@ -48,18 +50,18 @@ export function AccountSecuritySettings() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Mail className="h-5 w-5 text-primary" />
-            Adresse email
+            <Mail className="h-4 w-4 text-primary" />
+            {t("settings.account.emailTitle")}
           </CardTitle>
           <CardDescription>
-            Modifiez votre adresse email
+            {t("settings.account.emailDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {isEditingEmail ? (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="email">Nouvelle adresse email</Label>
+                <Label htmlFor="email">{t("settings.account.newEmailLabel")}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -70,10 +72,10 @@ export function AccountSecuritySettings() {
               </div>
               <div className="flex gap-2">
                 <Button onClick={() => setIsEditingEmail(false)}>
-                  Enregistrer
+                  {t("settings.account.save")}
                 </Button>
                 <Button variant="outline" onClick={() => setIsEditingEmail(false)}>
-                  Annuler
+                  {t("settings.account.cancel")}
                 </Button>
               </div>
             </div>
@@ -81,10 +83,10 @@ export function AccountSecuritySettings() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">{email}</p>
-                <p className="text-xs text-muted-foreground">Votre adresse email actuelle</p>
+                <p className="text-xs text-muted-foreground">{t("settings.account.currentEmailInfo")}</p>
               </div>
               <Button variant="outline" onClick={() => setIsEditingEmail(true)}>
-                Modifier
+                {t("settings.account.edit")}
               </Button>
             </div>
           )}
@@ -96,14 +98,14 @@ export function AccountSecuritySettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Lock className="h-5 w-5 text-primary" />
-            Mot de passe
+            {t("settings.account.passwordTitle")}
           </CardTitle>
           <CardDescription>
-            Modifiez votre mot de passe
+            {t("settings.account.passwordDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="outline">Changer le mot de passe</Button>
+          <Button variant="outline">{t("settings.account.changePassword")}</Button>
         </CardContent>
       </Card>
 
@@ -112,31 +114,30 @@ export function AccountSecuritySettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
             <Trash2 className="h-5 w-5" />
-            Zone de danger
+            {t("settings.account.dangerZoneTitle")}
           </CardTitle>
           <CardDescription>
-            Supprimez définitivement votre compte
+            {t("settings.account.dangerZoneDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive">
-                Supprimer mon compte
+                {t("settings.account.deleteAccount")}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Êtes-vous absolument sûr ?</AlertDialogTitle>
+                <AlertDialogTitle>{t("settings.account.deleteConfirmTitle")}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Cette action est irréversible. Cela supprimera définitivement votre
-                  compte et toutes vos données de nos serveurs.
+                  {t("settings.account.deleteConfirmDescription")}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                <AlertDialogCancel>{t("settings.account.cancel")}</AlertDialogCancel>
                 <AlertDialogAction className="bg-destructive hover:bg-destructive/90">
-                  Confirmer la suppression
+                  {t("settings.account.confirmDelete")}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
