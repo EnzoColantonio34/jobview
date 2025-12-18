@@ -5,8 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Mail, Bell, MessageSquare } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 export function NotificationsSettings() {
+
+  const { t } = useTranslation()
   const [emailNotifications, setEmailNotifications] = useState(true)
   const [pushNotifications, setPushNotifications] = useState(false)
   const [inAppNotifications, setInAppNotifications] = useState(true)
@@ -18,18 +21,18 @@ export function NotificationsSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Mail className="h-5 w-5 text-primary" />
-            Notifications email
+            {t("settings.notifications.emailTitle")}
           </CardTitle>
           <CardDescription>
-            Recevez des notifications par email
+            {t("settings.notifications.emailDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <Label htmlFor="email-notif">Activer les notifications email</Label>
+              <Label htmlFor="email-notif">{t("settings.notifications.emailLabel")}</Label>
               <p className="text-sm text-muted-foreground">
-                Recevez des emails pour les événements importants
+                {t("settings.notifications.emailInfo")}
               </p>
             </div>
             <Switch
@@ -46,18 +49,18 @@ export function NotificationsSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5 text-primary" />
-            Notifications push web
+            {t("settings.notifications.pushTitle")}
           </CardTitle>
           <CardDescription>
-            Recevez des notifications dans votre navigateur
+            {t("settings.notifications.pushDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <Label htmlFor="push-notif">Activer les notifications push</Label>
+              <Label htmlFor="push-notif">{t("settings.notifications.pushLabel")}</Label>
               <p className="text-sm text-muted-foreground">
-                Soyez alerté en temps réel des nouveaux événements
+                {t("settings.notifications.pushInfo")}
               </p>
             </div>
             <Switch
@@ -74,18 +77,18 @@ export function NotificationsSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MessageSquare className="h-5 w-5 text-primary" />
-            Notifications in-app
+            {t("settings.notifications.inAppTitle")}
           </CardTitle>
           <CardDescription>
-            Recevez des notifications dans l'application
+            {t("settings.notifications.inAppDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <Label htmlFor="inapp-notif">Activer les notifications in-app</Label>
+              <Label htmlFor="inapp-notif">{t("settings.notifications.inAppLabel")}</Label>
               <p className="text-sm text-muted-foreground">
-                Affichez des notifications dans l'interface
+                {t("settings.notifications.inAppInfo")}
               </p>
             </div>
             <Switch

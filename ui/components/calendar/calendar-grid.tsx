@@ -1,5 +1,8 @@
+"use client"
+
 import { THEME_TEMPLATES } from "@/config/theme-templates"
-import { DAYS_OF_WEEK, getDaysInMonth, getFirstDayOfMonth, formatDateString } from "@/lib/calendar-utils"
+import { DAYS_OF_WEEK_KEYS, getDaysInMonth, getFirstDayOfMonth, formatDateString } from "@/lib/calendar-utils"
+import { useTranslation } from "react-i18next"
 
 export interface Interview {
   id: string
@@ -15,6 +18,7 @@ interface CalendarGridProps {
 }
 
 export function CalendarGrid({ currentDate, interviews }: CalendarGridProps) {
+  const { t } = useTranslation()
   const days = []
   const daysInMonth = getDaysInMonth(currentDate)
   const firstDay = getFirstDayOfMonth(currentDate)
@@ -31,9 +35,11 @@ export function CalendarGrid({ currentDate, interviews }: CalendarGridProps) {
     <div className="space-y-4">
       {/* Days of week */}
       <div className="grid grid-cols-7 gap-2">
-        {DAYS_OF_WEEK.map((day) => (
-          <div key={day} className={`text-center text-sm font-semibold ${THEME_TEMPLATES.text.muted}`}>
-            {day}
+        {DAYS_OF_WEEK_KEYS.map((key) => (
+          <div
+            key={key}
+            className={`text-center text-sm font-semibold ${THEME_TEMPLATES.text.muted}`}>
+            {t(key)}
           </div>
         ))}
       </div>

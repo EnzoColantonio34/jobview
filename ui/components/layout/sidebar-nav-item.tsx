@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { NavItem } from "./nav-items.config"
+import { useTranslation } from "react-i18next"
 
 interface SidebarNavItemProps {
   item: NavItem
@@ -9,6 +10,8 @@ interface SidebarNavItemProps {
 }
 
 export function SidebarNavItem({ item, isActive, onClick }: SidebarNavItemProps) {
+  const { t } = useTranslation()
+
   return (
     <button
       onClick={onClick}
@@ -20,7 +23,7 @@ export function SidebarNavItem({ item, isActive, onClick }: SidebarNavItemProps)
       )}
     >
       <span className="relative z-10">{item.icon}</span>
-      <span className="relative z-10 flex-1 text-left">{item.label}</span>
+      <span className="relative z-10 flex-1 text-left">{t(`nav.${item.id}`)}</span>
       {isActive && <ChevronRight className="h-4 w-4 opacity-70" />}
     </button>
   )

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Trash2, Plus } from "lucide-react"
 import { THEME_TEMPLATES } from "@/config/theme-templates"
+import { useTranslation } from "react-i18next"
 import type { Interview } from "@/components/calendar/calendar-grid"
 
 interface UpcomingInterviewsListProps {
@@ -10,18 +11,20 @@ interface UpcomingInterviewsListProps {
 }
 
 export function UpcomingInterviewsList({ interviews, onDelete, onAdd }: UpcomingInterviewsListProps) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className={`font-semibold ${THEME_TEMPLATES.text.subheading}`}>Mes entretiens</h3>
+        <h3 className={`font-semibold ${THEME_TEMPLATES.text.subheading}`}>{t("upcomingInterviews.title")}</h3>
         <Button size="sm" className="gap-1 bg-gradient-to-r from-primary to-secondary" onClick={onAdd}>
           <Plus className="h-4 w-4" />
-          Ajouter
+          {t("upcomingInterviews.add")}
         </Button>
       </div>
       <div className="space-y-2 max-h-48 overflow-y-auto">
         {interviews.length === 0 ? (
-          <p className={THEME_TEMPLATES.text.muted}>Aucun entretien prévu</p>
+          <p className={THEME_TEMPLATES.text.muted}>{t("upcomingInterviews.noInterviews")}</p>
         ) : (
           interviews.map((interview) => (
             <div

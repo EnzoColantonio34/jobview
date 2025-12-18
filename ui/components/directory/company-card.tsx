@@ -2,7 +2,8 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { MessageCircle, Trash2 } from "lucide-react"
 import { THEME_TEMPLATES } from "@/config/theme-templates"
-import { type Company, getStatusColor, getStatusLabel } from "@/lib/company-utils"
+import { useTranslation } from "react-i18next"
+import { type Company, getStatusColor, getStatusLabelKey } from "@/lib/company-utils"
 
 interface CompanyCardProps {
   company: Company
@@ -11,6 +12,8 @@ interface CompanyCardProps {
 }
 
 export function CompanyCard({ company, onDelete, onMessage }: CompanyCardProps) {
+  const { t } = useTranslation()
+
   return (
     <Card className={`${THEME_TEMPLATES.card.interactive} p-4 ${THEME_TEMPLATES.animation.slideInLeft}`}>
       <div className="flex items-start justify-between gap-4">
@@ -22,12 +25,12 @@ export function CompanyCard({ company, onDelete, onMessage }: CompanyCardProps) 
                 company.status,
               )}`}
             >
-              {getStatusLabel(company.status)}
+              {t(getStatusLabelKey(company.status))}
             </span>
           </div>
           <p className={`mt-1 text-sm ${THEME_TEMPLATES.text.body}`}>{company.position}</p>
           <p className={`${THEME_TEMPLATES.text.small}`}>
-            Website: {company.website} • Contacté le {company.contactDate}
+            {t("company.website")} {company.website} • {t("company.contactedOn")} {company.contactDate}
           </p>
         </div>
         <div className="flex gap-2">

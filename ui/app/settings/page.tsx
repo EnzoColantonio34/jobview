@@ -4,9 +4,11 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { Settings } from "@/components/settings/settings-page"
+import { useTranslation } from "react-i18next"
 
 export default function SettingsPage() {
   const router = useRouter()
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen bg-background">
@@ -17,7 +19,7 @@ export default function SettingsPage() {
           className="mb-6 -ml-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          Retour
+          {t("common.back")}
         </Button>
         <Settings />
       </div>

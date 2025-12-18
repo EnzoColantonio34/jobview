@@ -5,6 +5,7 @@ import { ChatContainer, type Message } from "@/components/chat/chat-container"
 import { ChatInput } from "@/components/chat/chat-input"
 import { ChatWelcome } from "@/components/chat/chat-welcome"
 import { THEME_TEMPLATES } from "@/config/theme-templates"
+import { useTranslation } from "react-i18next"
 
 const interviewQuestions = [
   "Parlez-moi de vos plus grands accomplissements professionnels.",
@@ -20,6 +21,7 @@ const interviewQuestions = [
 ]
 
 export function LLMChat() {
+  const { t } = useTranslation()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -62,7 +64,7 @@ export function LLMChat() {
               onChange={setInput}
               onSubmit={handleSend}
               isLoading={isLoading}
-              placeholder="Envoyer votre réponse..."
+              placeholder={t("chat.firstInputPlaceholder")}
             />
           </div>
         </div>
@@ -74,7 +76,7 @@ export function LLMChat() {
             onChange={setInput}
             onSubmit={handleSend}
             isLoading={isLoading}
-            placeholder="Votre réponse..."
+            placeholder={t("chat.inputPlaceholder")}
           />
         </div>
       )}
