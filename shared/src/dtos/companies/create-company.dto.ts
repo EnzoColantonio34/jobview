@@ -1,15 +1,10 @@
-import { Type } from 'class-transformer';
 import {
     IsString,
     IsEmail,
     IsNotEmpty,
-    MinLength,
     MaxLength,
-    Matches,
     IsOptional,
-    IsPhoneNumber,
-    IsDate,
-    IsNumber,
+    IsPhoneNumber
 } from 'class-validator';
   
 export class CreateCompanyDto {
@@ -49,6 +44,4 @@ export class CreateCompanyDto {
     @IsPhoneNumber( 'FR', { message: 'Phone number must a valid french phone number' })
     phoneNumber?: string;
 
-    // @IsEnum(UserRole, { message: 'role must be one of: admin, free, or premium' })
-    // role: UserRole;
 }

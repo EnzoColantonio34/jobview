@@ -6,14 +6,21 @@ import {
     ManyToOne,
     JoinColumn,
     RelationId,
+    OneToMany,
+    DeleteDateColumn,
+    Unique,
+    PrimaryColumn,
 } from 'typeorm';
 import { User } from '../users/user.entity';
+import { Interview } from '../interviews/interview.entity';
+import { v7 as uuidv7 } from 'uuid';
 
 @Entity('companies')
+@Unique(['name', 'user'])
 export class Company {
-    // Default nullable: false
-    @PrimaryGeneratedColumn('uuid')
-    uuid: string;
+
+    @PrimaryColumn('varchar', { length: 36 }) 
+    companyId: string = uuidv7();
 
     @Column({ length: 50 })
     name: string;
@@ -36,27 +43,21 @@ export class Company {
     @Column({ length: 50 })
     phoneNumber: string;
 
+    @DeleteDateColumn()
+    deletedAt: Date | null;
+
     // Plusieurs Companies -> Un User
     // onDelete: 'CASCADE' signifie que si on supprime l'User, 
-    // ses entreprises sont supprimées automatiquement (optionnel mais recommandé ici).
+    // ses entreprises sont supprimées automatiquement
     @ManyToOne(() => User, (user) => user.companies, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'user_id' }) // <--- Force le nom de la colonne pour coller à ton schéma DrawDB
+    @JoinColumn({ name: 'user_id' })
     user: User;
-
-    // Optionnel : Si tu veux accéder à l'ID directement sans charger toute la relation User
-    // @Column({ nullable: true, insert: false, update: false })
-    // userId: string;
-    // @RelationId({ nullable: true, insert: false, update: false })
-    // userId: string;
 
     @RelationId((company: Company) => company.user) 
     userId: string;
 
+    // Un User -> Plusieurs Interviews
+    @OneToMany(() => Interview, (interview) => interview.company)
+    interviews: Interview[];
 
-    // @CreateDateColumn()
-    // createdAt: Date;
-
-    // Relations
-    // @OneToMany(() => Mood, (mood) => mood.user)
-    // moods: Mood[];
 }

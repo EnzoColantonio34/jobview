@@ -1,14 +1,11 @@
 import { Controller, Post, Body, UseGuards, Get, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto } from '../users/dto/login.dto';
-import { CreateUserDto } from '../users/dto/create-user.dto';
-import { AuthResponseDto } from './dto/auth-response-dto';
 import { JwtAuthGuard } from './jwt/jwt-auth.guard';
 import { JwtRefreshGuard } from './jwt/jwt-refresh.guard';
 import { GetUser } from '../decorators/get-user.decorator';
 import { User } from '../users/user.entity';
-import { CheckAvailabilityDto } from '../users/dto/check-availability.dto';
 import { UsersService } from '../users/users.service';
+import { AuthResponseDto, CheckAvailabilityDto, CreateUserDto, LoginDto } from '@jobview/shared';
 
 type RefreshTokenPayload = {
     uuid: string;
@@ -50,7 +47,7 @@ export class AuthController {
     async logout(
         @GetUser() user: User
     ): Promise<{ message: string }> {
-        return this.authService.logout(user.uuid);
+        return this.authService.logout(user.userId);
     }
 
     @UseGuards(JwtRefreshGuard)

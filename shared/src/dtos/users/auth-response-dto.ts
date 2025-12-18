@@ -1,4 +1,4 @@
-import { UserResponseDto } from "../../users/dto/response-user.dto";
+import { UserResponseDto } from "./response-user.dto";
 
 export class AuthResponseDto {
     message: string;

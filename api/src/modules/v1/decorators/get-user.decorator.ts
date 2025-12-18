@@ -6,10 +6,8 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
  */
 export const GetUser = createParamDecorator(
     (data: unknown, ctx: ExecutionContext) => {
-        // Récupère l'objet 'request'
         const request = ctx.switchToHttp().getRequest();
         
-        // Retourne la propriété 'user' de la request
         return request.user;
     },
 );

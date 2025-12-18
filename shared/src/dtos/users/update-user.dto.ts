@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types'; // ou '@nestjs/swagger' si tu utilises swagger
+import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
 
 // UpdateUserDto hérite de toutes les règles de CreateUserDto

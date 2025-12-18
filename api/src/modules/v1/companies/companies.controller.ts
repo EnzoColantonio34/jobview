@@ -1,11 +1,9 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
-import { CompanyResponseDto } from './dto/response-company.dto';
-import { CreateCompanyDto } from './dto/create-company.dto';
 import { GetUser } from '../decorators/get-user.decorator';
 import { User } from '../users/user.entity';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
-import { DeleteCompaniesDto } from './dto/delete-companies.dto';
+import { CompanyResponseDto, CreateCompanyDto, DeleteCompaniesDto, UpdateCompanyDto } from '@jobview/shared';
 
 @Controller('api/v1/companies')
 export class CompaniesController {
@@ -24,7 +22,7 @@ export class CompaniesController {
     async findAllByUser(
         @GetUser() user: User
     ): Promise<CompanyResponseDto[]> {
-        return this.companiesService.findAllByUser(user.uuid);
+        return this.companiesService.findAllByUser(user.userId);
     }
 
     // #endregion
@@ -34,10 +32,24 @@ export class CompaniesController {
     @UseGuards(JwtAuthGuard)
     @Post()
     async create(
-        @Body() createCompanyDto: CreateCompanyDto,
-        @GetUser() user: User
+        @GetUser() user: User,
+        @Body() createCompanyDto: CreateCompanyDto
     ): Promise<CompanyResponseDto> {
-        return this.companiesService.create(createCompanyDto, user.uuid);
+        return this.companiesService.create(createCompanyDto, user.userId);
+    }
+
+    // #endregion
+
+    // #region === PATCH ===
+
+    @UseGuards(JwtAuthGuard)
+    @Patch(':id')
+    async update(
+        @GetUser() user: User,
+        @Param('id') companyId: string,
+        @Body() updateCompanyDto: UpdateCompanyDto
+    ): Promise<CompanyResponseDto> {
+        return this.companiesService.update(updateCompanyDto, companyId, user.userId);
     }
 
     // #endregion
@@ -52,10 +64,10 @@ export class CompaniesController {
     @UseGuards(JwtAuthGuard)
     @Delete('batch') 
     async removeBatch(
-        @Body() dto: DeleteCompaniesDto, // On récupère le tableau d'IDs
-        @GetUser() user: User
+        @GetUser() user: User,
+        @Body() dto: DeleteCompaniesDto // On récupère le tableau d'IDs
     ): Promise<{message: string, count: number}> {
-        const count = await this.companiesService.removeBatch(dto.ids, user.uuid);
+        const count = await this.companiesService.removeBatch(dto.ids, user.userId);
 
         return { 
             message: `Batch delete successful. ${count} companies deleted.`,
@@ -66,16 +78,12 @@ export class CompaniesController {
     @UseGuards(JwtAuthGuard)
     @Delete(':uuid')
     async removeByUserAndCompanyUuid(
-        @Param('uuid') companyUuid: string, // L'ID de la company (depuis l'URL)
-        @GetUser() user: User    // L'ID de l'user (depuis le token)
+        @GetUser() user: User,
+        @Param('uuid') companyUuid: string
     ): Promise<{message: string}> {
-        // On passe les DEUX IDs au service
-        const deleted = await this.companiesService.removeByUserAndCompanyUuid(companyUuid, user.uuid);
+        const deleted = await this.companiesService.removeByUserAndCompanyUuid(companyUuid, user.userId);
 
         if (!deleted) {
-            // Si ça renvoie false, c'est soit que la company n'existe pas,
-            // soit qu'elle n'appartient pas à cet utilisateur.
-            // Dans les deux cas : 404 Not Found est une bonne réponse de sécurité.
             throw new HttpException('Company not found', HttpStatus.NOT_FOUND);
         }
 
@@ -87,8 +95,7 @@ export class CompaniesController {
     async removeAllByUserUuid(
         @GetUser() user: User
     ): Promise<{message: string, count: number}> {
-        // On récupère le nombre de suppressions
-        const count = await this.companiesService.removeAllByUserUuid(user.uuid);
+        const count = await this.companiesService.removeAllByUserUuid(user.userId);
 
         if (count === 0) {
             return { 

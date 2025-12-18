@@ -1,4 +1,5 @@
 import { Expose, Type } from 'class-transformer';
+import { InterviewResponseDto } from '../interviews/response-interview.dto';
 
 /**
  * DTO pour les réponses.
@@ -8,7 +9,7 @@ import { Expose, Type } from 'class-transformer';
  */
 export class CompanyResponseDto {
     @Expose()
-    uuid: string;
+    companyId: string;
 
     @Expose()
     name: string;
@@ -32,6 +33,14 @@ export class CompanyResponseDto {
     phoneNumber: string;
 
     @Expose()
+    deletedAt: Date;
+
+    @Expose()
     @Type(() => Date) // Garantit que la transformation est bien une Date
     createdAt: Date;
+
+    @Expose()
+    @Type(() => InterviewResponseDto) // <--- Très important pour la transformation
+    interviews: InterviewResponseDto[];
+
 }

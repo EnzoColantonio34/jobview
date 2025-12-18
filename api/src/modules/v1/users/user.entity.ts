@@ -4,14 +4,16 @@ import {
     Column,
     CreateDateColumn,
     OneToMany,
+    PrimaryColumn,
 } from 'typeorm';
 import { Company } from '../companies/company.entity';
+import { v7 as uuidv7 } from 'uuid';
 
 @Entity('users')
 export class User {
-    // Default nullable: false
-    @PrimaryGeneratedColumn('uuid')
-    uuid: string;
+    
+    @PrimaryColumn('varchar', { length: 36 }) 
+    userId: string = uuidv7();
 
     @Column({ length: 50, nullable: true })
     firstName: string;

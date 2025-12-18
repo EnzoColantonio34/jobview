@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './company.entity';
 import { In, Repository } from 'typeorm';
-import { CompanyResponseDto } from './dto/response-company.dto';
 import { plainToInstance } from 'class-transformer';
-import { CreateCompanyDto } from './dto/create-company.dto';
 import { User } from '../users/user.entity';
+import { CompanyResponseDto, CreateCompanyDto, UpdateCompanyDto } from '@jobview/shared';
 
 @Injectable()
 export class CompaniesService {
@@ -16,70 +15,126 @@ export class CompaniesService {
     ) {}
 
     async findAll(): Promise<CompanyResponseDto[]> {
-        const users = await this.companyRepository.find();
-        return plainToInstance(CompanyResponseDto, users);
+        const companies = await this.companyRepository.find({
+            withDeleted: true,
+            // (Optionnel) Tu peux trier pour voir les supprimés à la fin ou au début
+            // order: {
+            //     deletedAt: 'ASC', // NULLs (actifs) en premier généralement
+            //     name: 'ASC'
+            // }
+        });
+        return plainToInstance(CompanyResponseDto, companies);
     }
 
-    async findAllByUser(userId: string): Promise<CompanyResponseDto[]> {
-        // Récupérer les entreprises
+    // Order by name ASC
+    async findAllByUser(userUuid: string): Promise<CompanyResponseDto[]> {
         const companies = await this.companyRepository.find({
             where: {
-                // TypeORM est intelligent : on peut filtrer sur la relation "user"
-                // en spécifiant simplement son "uuid".
-                user: { uuid: userId } 
+                user: { userId: userUuid } 
             },
-            // Optionnel : Si tu veux ordonner par nom, par exemple
+            relations: ['interviews'],
             order: {
                 name: 'ASC'
             }
         });
 
-        // Transformer le tableau d'entités en tableau de DTOs
         return plainToInstance(CompanyResponseDto, companies);
     }
 
-    async create(createCompanyDto: CreateCompanyDto, userId: string): Promise<CompanyResponseDto> {
-        const company = this.companyRepository.create({
-            ...createCompanyDto,
-            user: { uuid: userId } as User 
+    async create(createCompanyDto: CreateCompanyDto, userUuid: string): Promise<CompanyResponseDto> {
+        const existingCompany = await this.companyRepository.findOne({
+            where: {
+                name: createCompanyDto.name,
+                user: { userId: userUuid }
+            },
+            withDeleted: true 
         });
 
-        const savedCompany = await this.companyRepository.save(company);
+        let companyToSave: Company;
+
+        if (existingCompany) {
+            if (!existingCompany.deletedAt) {
+                throw new ConflictException(`Une entreprise nommée "${createCompanyDto.name}" existe déjà.`);
+            }
+
+            existingCompany.deletedAt = null; 
+            
+            companyToSave = this.companyRepository.merge(existingCompany, createCompanyDto);
+            
+        } else {
+            companyToSave = this.companyRepository.create({
+                ...createCompanyDto,
+                user: { userId: userUuid } as User
+            });
+        }
+
+        const savedCompany = await this.companyRepository.save(companyToSave);
 
         return plainToInstance(CompanyResponseDto, savedCompany);
     }
 
-    async removeBatch(ids: string[], userId: string): Promise<number> {
+    async removeBatch(ids: string[], userUuid: string): Promise<number> {
         const result = await this.companyRepository.delete({
-            // 1. L'UUID doit être DANS la liste fournie
-            uuid: In(ids), 
-            
-            // 2. ET (Sécurité) L'utilisateur doit être le propriétaire
-            user: { uuid: userId } 
+            companyId: In(ids), 
+            user: { userId: userUuid } 
         });
 
         return result.affected ?? 0;
     }
 
     async removeByUserAndCompanyUuid(companyUuid: string, userUuid: string): Promise<boolean> {
-        const result = await this.companyRepository.delete({
-            uuid: companyUuid,       // Critère 1 : C'est la bonne company
-            user: { uuid: userUuid } // Critère 2 : Elle appartient bien à cet user !
+        const result = await this.companyRepository.softDelete({
+            companyId: companyUuid,
+            user: { userId: userUuid }
         });
 
-        // result.affected contient le nombre de lignes supprimées.
-        // Si c'est > 0, c'est que la suppression a marché.
-        // Si c'est 0, c'est que la company n'existe pas OU n'est pas à toi.
         return (result.affected ?? 0) > 0;
     }
 
     async removeAllByUserUuid(userUuid: string): Promise<number> {
         const result = await this.companyRepository.delete({
-            user: { uuid: userUuid }
+            user: { userId: userUuid }
         });
 
-        // On retourne simplement le nombre (0 si rien n'a été supprimé)
         return result.affected ?? 0;
+    }
+
+    async update(dto: UpdateCompanyDto, companyId: string, userId: string): Promise<CompanyResponseDto> {
+        if (Object.keys(dto).length === 0) {
+            throw new BadRequestException('Aucune donnée à modifier.');
+        }
+
+        const company = await this.companyRepository.findOne({
+            where: { 
+                companyId: companyId,
+                user: { userId: userId } 
+            }
+        });
+
+        if (!company) {
+            throw new NotFoundException('Entreprise non trouvée.');
+        }
+
+        if (dto.name && dto.name !== company.name) {
+            const existingName = await this.companyRepository.findOne({
+                where: { 
+                    name: dto.name, 
+                    user: { userId: userId } 
+                }
+            });
+
+            if (existingName) {
+                throw new ConflictException(`Vous avez déjà une entreprise nommée "${dto.name}".`);
+            }
+        }
+
+        this.companyRepository.merge(company, dto);
+
+        const savedCompany = await this.companyRepository.save(company);
+
+        return plainToInstance(CompanyResponseDto, savedCompany, { 
+            excludeExtraneousValues: true 
+        });
     }
 
 }

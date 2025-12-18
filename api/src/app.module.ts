@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/v1/auth/auth.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { CompaniesModule } from './modules/v1/companies/companies.module';
+import { InterviewsModule } from './modules/v1/interviews/interviews.module';
 
 @Module({
     imports: [
@@ -27,7 +28,8 @@ import { CompaniesModule } from './modules/v1/companies/companies.module';
         }),
         UsersModule,
         AuthModule,
-        CompaniesModule
+        CompaniesModule,
+        InterviewsModule
     ],
     controllers: [AppController],
     providers: [AppService],

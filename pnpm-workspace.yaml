@@ -1,8 +1,13 @@
 packages:
   - api
   - ui
+  - shared
 
 ignoredBuiltDependencies:
   - '@nestjs/core'
+  - '@parcel/watcher'
   - esbuild
   - unrs-resolver
+
+onlyBuiltDependencies:
+  - sqlite3

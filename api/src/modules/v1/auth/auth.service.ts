@@ -1,13 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { plainToInstance } from 'class-transformer';
-import { LoginDto } from '../users/dto/login.dto';
-import { UserResponseDto } from '../users/dto/response-user.dto';
 import { User } from '../users/user.entity';
-import { AuthResponseDto } from './dto/auth-response-dto';
 import * as bcrypt from 'bcryptjs';
+import { AuthResponseDto, CreateUserDto, LoginDto, UserResponseDto } from '@jobview/shared';
 
 @Injectable()
 export class AuthService {
@@ -75,13 +72,11 @@ export class AuthService {
      * Valide le refresh token et génère un nouvel access_token.
      */
     async refreshAccessToken(uuid: string, incomingRefreshToken: string): Promise<{ access_token: string }> {
-        // 1. Trouver l'utilisateur
         const user = await this.usersService.findByUuid(uuid);
         if (!user || !user.currentHashedRefreshToken) {
             throw new HttpException('Access Denied', HttpStatus.UNAUTHORIZED);
         }
 
-        // 2. Comparer le token reçu avec celui en BDD
         const isTokenValid = await bcrypt.compare(
             incomingRefreshToken,
             user.currentHashedRefreshToken,
@@ -91,7 +86,6 @@ export class AuthService {
             throw new HttpException('Access Denied', HttpStatus.UNAUTHORIZED);
         }
 
-        // 3. Générer un nouvel access_token
         const access_token = this._generateAccessToken(user);
         return { access_token };
     }
@@ -102,20 +96,19 @@ export class AuthService {
      * @returns Le string de l'access_token.
      */
     private _generateAccessToken(user: UserResponseDto | User): string {
-        const payload = { username: user.username, sub: user.uuid };
+        const payload = { username: user.username, sub: user.userId };
         return this.jwtService.sign(payload);
     }
 
     private async _generateRefreshToken(user: User): Promise<string> {
-        const payload = { sub: user.uuid }; // Le RT n'a besoin que du sub
+        const payload = { sub: user.userId };
         const token = this.jwtService.sign(payload, {
             secret: process.env.JWT_REFRESH_SECRET,
-            expiresIn: '7d', // Durée longue
+            expiresIn: '7d',
         });
 
-        // Hasher et stocker le token dans la BDD
         const hashedToken = await bcrypt.hash(token, 10);
-        await this.usersService.setCurrentHashedRefreshToken(user.uuid, hashedToken);
+        await this.usersService.setCurrentHashedRefreshToken(user.userId, hashedToken);
 
         return token;
     }
