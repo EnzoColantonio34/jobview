@@ -9,7 +9,7 @@ import { CompanyResponseDto } from '../companies/response-company.dto';
  */
 export class InterviewResponseDto {
     @Expose()
-    interviewId: string;
+    id: string;
 
     @Expose()
     label: string;

@@ -30,7 +30,7 @@ export class AuthService {
         const user = await this.usersService.create(createUserDto);
 
         const access_token = this._generateAccessToken(user);
-        const refresh_token = await this._generateRefreshToken(user); // Notez le 'await'
+        const refresh_token = await this._generateRefreshToken(user);
         const filteredUser = plainToInstance(UserResponseDto, user);
 
         return {
@@ -96,19 +96,19 @@ export class AuthService {
      * @returns Le string de l'access_token.
      */
     private _generateAccessToken(user: UserResponseDto | User): string {
-        const payload = { username: user.username, sub: user.userId };
+        const payload = { username: user.username, sub: user.id };
         return this.jwtService.sign(payload);
     }
 
     private async _generateRefreshToken(user: User): Promise<string> {
-        const payload = { sub: user.userId };
+        const payload = { sub: user.id };
         const token = this.jwtService.sign(payload, {
             secret: process.env.JWT_REFRESH_SECRET,
             expiresIn: '7d',
         });
 
         const hashedToken = await bcrypt.hash(token, 10);
-        await this.usersService.setCurrentHashedRefreshToken(user.userId, hashedToken);
+        await this.usersService.setCurrentHashedRefreshToken(user.id, hashedToken);
 
         return token;
     }

@@ -69,13 +69,13 @@ export class UsersService {
         const conflictConditions: FindOptionsWhere<User>[] = []; 
 
         if (updateUserDto.email) {
-            conflictConditions.push({ email: updateUserDto.email, userId: Not(userId) });
+            conflictConditions.push({ email: updateUserDto.email, id: Not(userId) });
         }
         if (updateUserDto.username) {
-            conflictConditions.push({ username: updateUserDto.username, userId: Not(userId) });
+            conflictConditions.push({ username: updateUserDto.username, id: Not(userId) });
         }
         if (updateUserDto.phoneNumber) {
-            conflictConditions.push({ phoneNumber: updateUserDto.phoneNumber, userId: Not(userId) });
+            conflictConditions.push({ phoneNumber: updateUserDto.phoneNumber, id: Not(userId) });
         }
 
         if (conflictConditions.length > 0) {
@@ -102,7 +102,7 @@ export class UsersService {
 
         await this.userRepository.update(userId, updateUserDto);
 
-        const updatedUser = await this.userRepository.findOneBy({ userId });
+        const updatedUser = await this.userRepository.findOneBy({ id: userId });
 
         if (!updatedUser) {
             throw new NotFoundException('User not found');
@@ -118,7 +118,7 @@ export class UsersService {
             const condition: FindOptionsWhere<User> = { email: dto.email };
         
             if (currentUserId) {
-                condition.userId = Not(currentUserId);
+                condition.id = Not(currentUserId);
             }
             
             whereConditions.push(condition);
@@ -128,7 +128,7 @@ export class UsersService {
             const condition: FindOptionsWhere<User> = { username: dto.username };
 
             if (currentUserId) {
-                condition.userId = Not(currentUserId);
+                condition.id = Not(currentUserId);
             }
 
             whereConditions.push(condition);
@@ -159,7 +159,7 @@ export class UsersService {
     }
 
     async findByUuid(userId: string): Promise<User | null> {
-        return this.userRepository.findOne({ where: { userId } });
+        return this.userRepository.findOne({ where: { id: userId } });
     }
 
     /**
@@ -172,7 +172,7 @@ export class UsersService {
         if (hashedToken == null) {
             console.log("logout")
             await this.userRepository.update(
-                { userId: uuid, currentHashedRefreshToken: Not(IsNull()) }, // Condition : seulement si non null
+                { id: uuid, currentHashedRefreshToken: Not(IsNull()) }, // Condition : seulement si non null
                 { currentHashedRefreshToken: hashedToken }
             );
         } else {
@@ -184,7 +184,7 @@ export class UsersService {
     }
 
     async deleteUserByUuid(userId: string): Promise<boolean> {
-        const user = await this.userRepository.findOne({ where: { userId } });
+        const user = await this.userRepository.findOne({ where: { id: userId } });
 
         if (!user) {
             return false;

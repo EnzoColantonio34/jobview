@@ -5,7 +5,7 @@ import { GetUser } from '../decorators/get-user.decorator';
 import { User } from '../users/user.entity';
 import { CreateInterviewDto, InterviewResponseDto } from '@jobview/shared';
 
-@Controller('api/v1/interviews')
+@Controller('interviews')
 export class InterviewsController {
 
     constructor(private readonly interviewsService: InterviewsService) {}
@@ -22,7 +22,7 @@ export class InterviewsController {
     async findAllByUser(
         @GetUser() user: User
     ): Promise<InterviewResponseDto[]> {
-        return this.interviewsService.findAllByUser(user.userId);
+        return this.interviewsService.findAllByUser(user.id);
     }
 
     // #endregion
@@ -35,7 +35,7 @@ export class InterviewsController {
         @Body() createInterviewDto: CreateInterviewDto,
         @GetUser() user: User
     ): Promise<InterviewResponseDto> {
-        return this.interviewsService.create(createInterviewDto, user.userId);
+        return this.interviewsService.create(createInterviewDto, user.id);
     }
 
     // #endregion
@@ -43,12 +43,12 @@ export class InterviewsController {
     // #region === DELETE ===
 
     @UseGuards(JwtAuthGuard)
-    @Delete(':uuid')
-    async removeByUserAndInterviewUuid(
-        @Param('uuid') interviewUuid: string,
+    @Delete(':id')
+    async removeByUserAndInterviewId(
+        @Param('id') interviewId: number,
         @GetUser() user: User
     ): Promise<{message: string}> {
-        const deleted = await this.interviewsService.removeByUserAndInterviewUuid(interviewUuid, user.userId);
+        const deleted = await this.interviewsService.removeByUserAndInterviewId(interviewId, user.id);
 
         if (!deleted) {
 

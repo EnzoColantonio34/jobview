@@ -5,7 +5,7 @@ import {
     MaxLength,
     IsOptional,
     IsDate,
-    IsUUID
+    IsNumber
 } from 'class-validator';
   
 export class CreateInterviewDto {
@@ -35,7 +35,7 @@ export class CreateInterviewDto {
     remindDate?: Date
 
     @IsNotEmpty()
-    @IsUUID('7', { message: 'companyId must be a valid UUID' })
-    companyId: string;
+    @IsNumber({}, { message: 'companyId must be a number' })
+    companyId: number;
     
 }

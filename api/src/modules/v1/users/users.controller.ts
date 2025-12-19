@@ -6,7 +6,7 @@ import { GetUser } from '../decorators/get-user.decorator';
 import { plainToInstance } from 'class-transformer';
 import { CheckAvailabilityDto, UpdateUserDto, UserResponseDto } from '@jobview/shared';
 
-@Controller('api/v1/users')
+@Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
@@ -31,7 +31,7 @@ export class UsersController {
         @GetUser() user: User,
         @Query() dto: CheckAvailabilityDto
     ): Promise<{ available: boolean }> {
-        return this.usersService.checkAvailability(dto, user.userId);
+        return this.usersService.checkAvailability(dto, user.id);
     }
 
     // #endregion
@@ -44,7 +44,7 @@ export class UsersController {
         @GetUser() user: User, 
         @Body() updateUserDto: UpdateUserDto
     ): Promise<UserResponseDto> {
-        return this.usersService.update(user.userId, updateUserDto);
+        return this.usersService.update(user.id, updateUserDto);
     }
 
     // #endregion
@@ -56,7 +56,7 @@ export class UsersController {
     async deleteAccount(
         @GetUser() user: User
     ): Promise<{message: string}> {
-        const deleted = await this.usersService.deleteUserByUuid(user.userId);
+        const deleted = await this.usersService.deleteUserByUuid(user.id);
 
         if (!deleted) {
             throw new HttpException('User not found', HttpStatus.NOT_FOUND);

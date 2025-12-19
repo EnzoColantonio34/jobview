@@ -13,14 +13,13 @@ import {
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Interview } from '../interviews/interview.entity';
-import { v7 as uuidv7 } from 'uuid';
 
 @Entity('companies')
 @Unique(['name', 'user'])
 export class Company {
 
-    @PrimaryColumn('varchar', { length: 36 }) 
-    companyId: string = uuidv7();
+    @PrimaryGeneratedColumn()
+    id: number
 
     @Column({ length: 50 })
     name: string;

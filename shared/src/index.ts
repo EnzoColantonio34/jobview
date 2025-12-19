@@ -13,4 +13,12 @@ export * from './dtos/users/login.dto';
 export * from './dtos/users/response-user.dto';
 export * from './dtos/users/update-user.dto';
 
+export * from './dtos/degrees/create-degree.dto';
+export * from './dtos/degrees/response-degree.dto';
+export * from './dtos/degrees/update-degree.dto';
+
+export * from './dtos/experiences/create-experience.dto';
+export * from './dtos/experiences/response-experience.dto';
+export * from './dtos/experiences/update-experience.dto';
+
 // export * from './enums/role.enum';

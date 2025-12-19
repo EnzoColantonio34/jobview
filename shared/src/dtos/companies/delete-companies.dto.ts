@@ -1,8 +1,8 @@
-import { IsArray, IsUUID, ArrayNotEmpty } from 'class-validator';
+import { IsArray, IsUUID, ArrayNotEmpty, IsNumber } from 'class-validator';
 
 export class DeleteCompaniesDto {
     @IsArray()
     @ArrayNotEmpty({ message: 'La liste des IDs ne peut pas être vide.' })
-    @IsUUID('7', { each: true, message: 'Tous les éléments doivent être des UUIDs valides.' })
+    @IsNumber({}, { message: 'companyId must be a number' })
     ids: string[];
 }

@@ -30,7 +30,7 @@ export class CompaniesService {
     async findAllByUser(userUuid: string): Promise<CompanyResponseDto[]> {
         const companies = await this.companyRepository.find({
             where: {
-                user: { userId: userUuid } 
+                user: { id: userUuid } 
             },
             relations: ['interviews'],
             order: {
@@ -45,7 +45,7 @@ export class CompaniesService {
         const existingCompany = await this.companyRepository.findOne({
             where: {
                 name: createCompanyDto.name,
-                user: { userId: userUuid }
+                user: { id: userUuid }
             },
             withDeleted: true 
         });
@@ -64,7 +64,7 @@ export class CompaniesService {
         } else {
             companyToSave = this.companyRepository.create({
                 ...createCompanyDto,
-                user: { userId: userUuid } as User
+                user: { id: userUuid } as User
             });
         }
 
@@ -75,17 +75,17 @@ export class CompaniesService {
 
     async removeBatch(ids: string[], userUuid: string): Promise<number> {
         const result = await this.companyRepository.delete({
-            companyId: In(ids), 
-            user: { userId: userUuid } 
+            id: In(ids), 
+            user: { id: userUuid } 
         });
 
         return result.affected ?? 0;
     }
 
-    async removeByUserAndCompanyUuid(companyUuid: string, userUuid: string): Promise<boolean> {
+    async removeByUserAndCompanyId(companyId: number, userUuid: string): Promise<boolean> {
         const result = await this.companyRepository.softDelete({
-            companyId: companyUuid,
-            user: { userId: userUuid }
+            id: companyId,
+            user: { id: userUuid }
         });
 
         return (result.affected ?? 0) > 0;
@@ -93,21 +93,21 @@ export class CompaniesService {
 
     async removeAllByUserUuid(userUuid: string): Promise<number> {
         const result = await this.companyRepository.delete({
-            user: { userId: userUuid }
+            user: { id: userUuid }
         });
 
         return result.affected ?? 0;
     }
 
-    async update(dto: UpdateCompanyDto, companyId: string, userId: string): Promise<CompanyResponseDto> {
+    async update(dto: UpdateCompanyDto, companyId: number, userId: string): Promise<CompanyResponseDto> {
         if (Object.keys(dto).length === 0) {
             throw new BadRequestException('Aucune donnée à modifier.');
         }
 
         const company = await this.companyRepository.findOne({
             where: { 
-                companyId: companyId,
-                user: { userId: userId } 
+                id: companyId,
+                user: { id: userId } 
             }
         });
 
@@ -119,7 +119,7 @@ export class CompaniesService {
             const existingName = await this.companyRepository.findOne({
                 where: { 
                     name: dto.name, 
-                    user: { userId: userId } 
+                    user: { id: userId } 
                 }
             });
 
@@ -132,9 +132,7 @@ export class CompaniesService {
 
         const savedCompany = await this.companyRepository.save(company);
 
-        return plainToInstance(CompanyResponseDto, savedCompany, { 
-            excludeExtraneousValues: true 
-        });
+        return plainToInstance(CompanyResponseDto, savedCompany);
     }
 
 }
