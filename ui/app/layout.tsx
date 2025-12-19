@@ -2,8 +2,10 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+
 import { ThemeProvider } from "@/providers/theme-provider"
 import { I18nProvider } from "@/providers/i18n-provider"
+import { ClientOnly } from "@/components/client-only"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -25,8 +27,10 @@ export default function RootLayout({
       <body className={`font-sans antialiased`}>
         <ThemeProvider>
           <I18nProvider>
-            {children}
-            <Analytics />
+            <ClientOnly>
+              {children}
+              <Analytics />
+            </ClientOnly>
           </I18nProvider>
         </ThemeProvider>
       </body>

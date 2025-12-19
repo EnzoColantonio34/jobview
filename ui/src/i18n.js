@@ -8,12 +8,14 @@ import fr from "./locales/fr.json";
 import en from "./locales/en.json";
 
 
+
 const getInitialLanguage = () => {
   if (typeof window !== "undefined") {
     const stored = localStorage.getItem("i18nextLng")
     if (stored) return stored
+    if (navigator.language) return navigator.language.split("-")[0]
   }
-  return undefined
+  return "fr"
 }
 
 i18n
@@ -25,7 +27,7 @@ i18n
       en: { translation: en },
     },
     lng: getInitialLanguage(),
-    fallbackLng: "fr", 
+    fallbackLng: "fr",
     detection: {
       order: ["localStorage", "navigator"], 
       caches: ["localStorage"],
