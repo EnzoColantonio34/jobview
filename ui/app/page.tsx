@@ -7,6 +7,7 @@ import { LLMChat } from "@/components/chat/llm-chat"
 import { InterviewCalendar } from "@/components/calendar/interview-calendar"
 import { InterviewStats } from "@/components/stats/interview-stats"
 import { CompanyDirectory } from "@/components/directory/company-directory"
+import { AuthGuard } from "@/components/auth/auth-guard"
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("chat")
@@ -34,16 +35,18 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <AppHeader sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-      <div className="flex flex-1">
-        <AppSidebar activeTab={activeTab} onTabChange={setActiveTab} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <main className="flex-1 overflow-auto">
-          <div className="h-full p-6 md:p-8">
-            <div className="max-w-7xl h-full mx-auto">{renderContent()}</div>
-          </div>
-        </main>
+    <AuthGuard>
+      <div className="min-h-screen flex flex-col bg-background">
+        <AppHeader sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        <div className="flex flex-1">
+          <AppSidebar activeTab={activeTab} onTabChange={setActiveTab} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <main className="flex-1 overflow-auto">
+            <div className="h-full p-6 md:p-8">
+              <div className="max-w-7xl h-full mx-auto">{renderContent()}</div>
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </AuthGuard>
   )
 }

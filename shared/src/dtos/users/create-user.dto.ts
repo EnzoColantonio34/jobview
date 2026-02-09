@@ -5,7 +5,6 @@ import {
     IsNotEmpty,
     MinLength,
     MaxLength,
-    Matches,
     IsOptional,
     IsPhoneNumber,
     IsDate,
@@ -36,11 +35,7 @@ export class CreateUserDto {
     @IsNotEmpty({ message: 'password is required' })
     @IsString({ message: 'password must be a string' })
     @MinLength(8, { message: 'Le mot de passe doit contenir au moins 8 caractères.' })
-    @MaxLength(50, { message: 'Le mot de passe ne peut pas dépasser 50 caractères.' })
-    @Matches(/(?=.*[A-Z])/, { message: 'Le mot de passe doit contenir au moins une lettre majuscule.' })
-    @Matches(/(?=.*[a-z])/, { message: 'Le mot de passe doit contenir au moins une lettre minuscule.' })
-    @Matches(/(?=.*\d)/, { message: 'Le mot de passe doit contenir au moins un chiffre.' })
-    @Matches(/(?=.*[@$!%*?&])/, { message: 'Le mot de passe doit contenir au moins un caractère spécial (@$!%*?&).' })
+    @MaxLength(255, { message: 'Le mot de passe ne peut pas dépasser 255 caractères.' })
     password: string;
 
     @IsOptional()

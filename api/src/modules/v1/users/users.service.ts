@@ -50,8 +50,8 @@ export class UsersService {
         return this.userRepository.save(user);
     }
 
-    public async validateUser(username: string, password: string): Promise<User | null> {
-        const user = await this._findByUsername(username);
+    public async validateUser(usernameOrEmail: string, password: string): Promise<User | null> {
+        const user = await this._findByUsernameOrEmail(usernameOrEmail);
         if (!user) return null;
 
         const passwordValid = await bcrypt.compare(password, user.password);
@@ -143,6 +143,15 @@ export class UsersService {
         });
 
         return { available: count === 0 };
+    }
+
+    private async _findByUsernameOrEmail(usernameOrEmail: string): Promise<User | null> {
+        return this.userRepository.findOne({ 
+            where: [
+                { username: usernameOrEmail },
+                { email: usernameOrEmail }
+            ] 
+        });
     }
 
     private async _findByUsername(username: string): Promise<User | null> {

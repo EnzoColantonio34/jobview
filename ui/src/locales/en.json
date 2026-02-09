@@ -133,5 +133,70 @@
       "rejected": "Rejected",
       "contacted": "Contacted"
     }
+  },
+  "auth": {
+    "subtitle": "Prepare for your interviews like a pro",
+    "loginTab": "Login",
+    "registerTab": "Sign up",
+    "loginTitle": "Welcome back!",
+    "loginDescription": "Sign in to your account to continue.",
+    "registerTitle": "Create an account",
+    "registerDescription": "Sign up to start preparing for your interviews.",
+    "loginButton": "Sign in",
+    "registerButton": "Sign up",
+    "loginSuccess": "Successfully signed in!",
+    "registerSuccess": "Account created successfully!",
+    "optionalFields": "Additional information (optional)",
+    "footer": "© 2026 JobView — All rights reserved",
+    "fields": {
+      "username": "Username",
+      "usernameOrEmail": "Username or email",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phoneNumber": "Phone number"
+    },
+    "placeholders": {
+      "username": "Enter your username",
+      "usernameOrEmail": "Your username or email",
+      "email": "example@email.com",
+      "password": "Enter your password",
+      "confirmPassword": "Confirm your password",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phoneNumber": "+33 6 12 34 56 78"
+    },
+    "validation": {
+      "usernameRequired": "Username is required",
+      "usernameOrEmailRequired": "Username or email is required",
+      "usernameOrEmailMax": "Maximum 100 characters",
+      "usernameMinLength": "Minimum 3 characters",
+      "usernameMax": "Maximum 50 characters",
+      "emailRequired": "Email address is required",
+      "emailInvalid": "Invalid email address",
+      "emailMax": "Maximum 100 characters",
+      "passwordMin": "Minimum 8 characters",
+      "passwordMax": "Maximum 50 characters",
+      "passwordStrength": "Password must contain an uppercase, a lowercase, a digit and a special character (@$!%*?&)",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsMismatch": "Passwords do not match",
+      "firstNameMax": "Maximum 50 characters",
+      "lastNameMax": "Maximum 50 characters",
+      "phoneInvalid": "Invalid French phone number"
+    },
+    "passwordStrength": {
+      "veryWeak": "Very weak",
+      "weak": "Weak",
+      "fair": "Fair",
+      "strong": "Strong",
+      "veryStrong": "Very strong"
+    },
+    "errors": {
+      "generic": "An error occurred. Please try again.",
+      "usernameTaken": "This username is already taken",
+      "emailTaken": "This email address is already in use"
+    }
   }
 }
