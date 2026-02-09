@@ -27,13 +27,13 @@ export class User {
     @Column({ length: 100, unique: true })
     email: string;
 
-    @Column({ length: 50 })
+    @Column({ length: 255 })
     password: string;
 
-    @Column({ nullable: false })
+    @Column({ nullable: true })
     birthDate: Date;
 
-    @Column({ unique: true })
+    @Column({ unique: true, nullable: true })
     phoneNumber: string;
 
     @CreateDateColumn()

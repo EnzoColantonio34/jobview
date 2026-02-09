@@ -5,7 +5,9 @@ import { Analytics } from "@vercel/analytics/next"
 
 import { ThemeProvider } from "@/providers/theme-provider"
 import { I18nProvider } from "@/providers/i18n-provider"
+import { AuthProvider } from "@/providers/auth-provider"
 import { ClientOnly } from "@/components/client-only"
+import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -28,7 +30,10 @@ export default function RootLayout({
         <ThemeProvider>
           <I18nProvider>
             <ClientOnly>
-              {children}
+              <AuthProvider>
+                {children}
+                <Toaster richColors position="top-right" />
+              </AuthProvider>
               <Analytics />
             </ClientOnly>
           </I18nProvider>

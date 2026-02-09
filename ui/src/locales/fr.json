@@ -133,5 +133,70 @@
       "rejected": "Rejeté",
       "contacted": "Contacté"
     }
+  },
+  "auth": {
+    "subtitle": "Préparez vos entretiens comme un pro",
+    "loginTab": "Connexion",
+    "registerTab": "Inscription",
+    "loginTitle": "Bon retour !",
+    "loginDescription": "Connectez-vous à votre compte pour continuer.",
+    "registerTitle": "Créer un compte",
+    "registerDescription": "Inscrivez-vous pour commencer à préparer vos entretiens.",
+    "loginButton": "Se connecter",
+    "registerButton": "S'inscrire",
+    "loginSuccess": "Connexion réussie !",
+    "registerSuccess": "Compte créé avec succès !",
+    "optionalFields": "Informations supplémentaires (optionnel)",
+    "footer": "© 2026 JobView — Tous droits réservés",
+    "fields": {
+      "username": "Nom d'utilisateur",
+      "usernameOrEmail": "Nom d'utilisateur ou email",
+      "email": "Adresse email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phoneNumber": "Téléphone"
+    },
+    "placeholders": {
+      "username": "Entrez votre nom d'utilisateur",
+      "usernameOrEmail": "Votre nom d'utilisateur ou email",
+      "email": "exemple@email.com",
+      "password": "Entrez votre mot de passe",
+      "confirmPassword": "Confirmez votre mot de passe",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phoneNumber": "06 12 34 56 78"
+    },
+    "validation": {
+      "usernameRequired": "Le nom d'utilisateur est requis",
+      "usernameOrEmailRequired": "Le nom d'utilisateur ou l'email est requis",
+      "usernameOrEmailMax": "100 caractères maximum",
+      "usernameMinLength": "3 caractères minimum",
+      "usernameMax": "50 caractères maximum",
+      "emailRequired": "L'adresse email est requise",
+      "emailInvalid": "Adresse email invalide",
+      "emailMax": "100 caractères maximum",
+      "passwordMin": "8 caractères minimum",
+      "passwordMax": "50 caractères maximum",
+      "passwordStrength": "Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&)",
+      "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
+      "passwordsMismatch": "Les mots de passe ne correspondent pas",
+      "firstNameMax": "50 caractères maximum",
+      "lastNameMax": "50 caractères maximum",
+      "phoneInvalid": "Numéro de téléphone français invalide"
+    },
+    "passwordStrength": {
+      "veryWeak": "Très faible",
+      "weak": "Faible",
+      "fair": "Moyen",
+      "strong": "Fort",
+      "veryStrong": "Très fort"
+    },
+    "errors": {
+      "generic": "Une erreur est survenue. Veuillez réessayer.",
+      "usernameTaken": "Ce nom d'utilisateur est déjà pris",
+      "emailTaken": "Cette adresse email est déjà utilisée"
+    }
   }
 }

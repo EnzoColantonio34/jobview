@@ -20,7 +20,7 @@ import { InterviewsModule } from './modules/v1/interviews/interviews.module';
                 type: 'sqlite',
                 database: configService.get<string>('DATABASE_NAME'), 
                 autoLoadEntities: true,
-                synchronize: false,
+                synchronize: true,
 
                 // Naming strategy, transforms myColumn in entity to my_column in database
                 namingStrategy: new SnakeNamingStrategy(),
