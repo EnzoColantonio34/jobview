@@ -37,7 +37,7 @@ export class InterviewsService {
         const interviews = await this.interviewRepository.find({
             where: {
                 company: {
-                    user: { userId: userUuid }
+                    user: { id: userUuid }
                 }
             },
             relations: ['company'], 
@@ -53,8 +53,8 @@ export class InterviewsService {
     async create(createInterviewDto: CreateInterviewDto, userId: string): Promise<InterviewResponseDto> {
         const company = await this.companyRepository.findOne({
             where: { 
-                companyId: createInterviewDto.companyId,
-                user: { userId: userId }
+                id: createInterviewDto.companyId,
+                user: { id: userId }
             }
         });
 
@@ -64,7 +64,7 @@ export class InterviewsService {
 
         const interview = this.interviewRepository.create({
             ...createInterviewDto,
-            company: { companyId: createInterviewDto.companyId } as Company
+            company: { id: createInterviewDto.companyId } as Company
         });
 
         const savedInterview = await this.interviewRepository.save(interview);
@@ -73,12 +73,12 @@ export class InterviewsService {
 
     }
 
-    async removeByUserAndInterviewUuid(interviewUuid: string, userUuid: string): Promise<boolean> {
+    async removeByUserAndInterviewId(interviewId: number, userUuid: string): Promise<boolean> {
         const interview = await this.interviewRepository.findOne({
             where: {
-                interviewId: interviewUuid,
+                id: interviewId,
                 company: {
-                    user: { userId: userUuid }
+                    user: { id: userUuid }
                 }
             },
             withDeleted: true
@@ -88,7 +88,7 @@ export class InterviewsService {
             return false;
         }
         
-        const result = await this.interviewRepository.delete(interviewUuid);
+        const result = await this.interviewRepository.delete(interviewId);
 
         return (result.affected ?? 0) > 0;
     }

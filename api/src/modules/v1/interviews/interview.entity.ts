@@ -1,5 +1,5 @@
 import {
-  Entity,
+    Entity,
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
@@ -8,13 +8,12 @@ import {
     PrimaryColumn,
 } from 'typeorm';
 import { Company } from '../companies/company.entity';
-import { v7 as uuidv7 } from 'uuid';
 
 @Entity('interviews')
 export class Interview {
     
-    @PrimaryColumn('varchar', { length: 36 }) 
-    interviewId: string = uuidv7();
+    @PrimaryGeneratedColumn()
+    id: number
 
     @Column({ length: 50 })
     label: string;
@@ -37,6 +36,6 @@ export class Interview {
     company: Company;
 
     @RelationId((interview: Interview) => interview.company) 
-    companyId: string;
+    companyId: number;
 
 }

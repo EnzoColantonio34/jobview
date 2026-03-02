@@ -7,7 +7,9 @@ import { ConfigService } from "@nestjs/config";
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    // Configuration CORS pour permettre les requêtes du frontend
+    app.setGlobalPrefix('api/v1');
+
+    // Configuration CORS pour permettre les requ�tes du frontend
     app.enableCors({
         origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001', 'http://127.0.0.1:5173'],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -32,6 +34,6 @@ async function bootstrap() {
     const port = configService.get<number>('PORT') ?? 3000;
 
     await app.listen(port);
-    console.log(`?? Backend NestJS running on: http://localhost:${port}`);
+    console.log(`🚀 Backend NestJS running on: http://localhost:${port}`);
 }
 bootstrap();

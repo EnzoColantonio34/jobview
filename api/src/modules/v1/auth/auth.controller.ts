@@ -12,7 +12,7 @@ type RefreshTokenPayload = {
     refreshToken: string;
 };
 
-@Controller('api/v1/auth')
+@Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}
 
@@ -47,7 +47,7 @@ export class AuthController {
     async logout(
         @GetUser() user: User
     ): Promise<{ message: string }> {
-        return this.authService.logout(user.userId);
+        return this.authService.logout(user.id);
     }
 
     @UseGuards(JwtRefreshGuard)

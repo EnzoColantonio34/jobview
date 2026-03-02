@@ -5,6 +5,7 @@ import {
     CreateDateColumn,
     OneToMany,
     PrimaryColumn,
+    BeforeInsert,
 } from 'typeorm';
 import { Company } from '../companies/company.entity';
 import { v7 as uuidv7 } from 'uuid';
@@ -12,8 +13,22 @@ import { v7 as uuidv7 } from 'uuid';
 @Entity('users')
 export class User {
     
-    @PrimaryColumn('varchar', { length: 36 }) 
-    userId: string = uuidv7();
+    // Postgre 18+
+    // @PrimaryColumn({ 
+    //     type: "uuid", 
+    //     default: () => "uuidv7()"
+    // })
+    // id: string;
+
+    @PrimaryColumn('uuid')
+    id: string
+
+    @BeforeInsert()
+    assignId() {
+        if (!this.id) {
+            this.id = uuidv7()
+        }
+    }
 
     @Column({ length: 50, nullable: true })
     firstName: string;
