@@ -198,5 +198,127 @@
       "usernameTaken": "This username is already taken",
       "emailTaken": "This email address is already in use"
     }
+  },
+  "onboarding": {
+    "header": {
+      "title": "JobView",
+      "subtitle": "Complete your profile",
+      "subtitleComplete": "Welcome!"
+    },
+    "navigation": {
+      "back": "Back",
+      "continue": "Continue",
+      "finish": "Finish",
+      "loading": "Loading..."
+    },
+    "feedback": {
+      "sessionExpiredTitle": "Session expired",
+      "sessionExpiredDescription": "Please sign in again to complete onboarding.",
+      "saveErrorTitle": "Error",
+      "saveErrorDescription": "An error occurred while saving."
+    },
+    "steps": {
+      "sector": "Sector",
+      "diploma": "Diploma",
+      "experience": "Experience",
+      "profile": "Profile",
+      "location": "Location",
+      "situation": "Situation"
+    },
+    "stepSector": {
+      "title": "What sector are you looking for?",
+      "description": "Select your field or type it directly",
+      "placeholder": "Ex: IT, Marketing...",
+      "selected": "Selected sector: {{sector}}"
+    },
+    "stepDiploma": {
+      "title": "What is your diploma level?",
+      "description": "Select the level that matches your background",
+      "levels": {
+        "none": "No diploma",
+        "cap-bep": "CAP / BEP",
+        "bac": "Baccalaureate",
+        "bac+2": "Associate Degree (2 years)",
+        "bac+3": "Bachelor's Degree (3 years)",
+        "bac+5": "Master's Degree (5 years)",
+        "bac+8": "PhD (8 years)"
+      }
+    },
+    "stepExperience": {
+      "title": "How many years of experience?",
+      "description": "Indicate your professional experience level",
+      "options": {
+        "0": {
+          "label": "No experience",
+          "subtitle": "Beginner / Student"
+        },
+        "1": {
+          "label": "Less than 1 year",
+          "subtitle": "Internship / Apprenticeship"
+        },
+        "1-3": {
+          "label": "1 to 3 years",
+          "subtitle": "Junior"
+        },
+        "3-5": {
+          "label": "3 to 5 years",
+          "subtitle": "Confirmed"
+        },
+        "5-10": {
+          "label": "5 to 10 years",
+          "subtitle": "Senior"
+        },
+        "10+": {
+          "label": "More than 10 years",
+          "subtitle": "Expert"
+        }
+      }
+    },
+    "stepDescription": {
+      "title": "Tell us about yourself",
+      "description": "Briefly describe your background and what you're looking for",
+      "placeholder": "Ex: Master's degree in computer science, looking for a fullstack developer position. I have 2 years of experience from my apprenticeship..."
+    },
+    "stepLocation": {
+      "title": "Where are you located?",
+      "description": "Indicate your city and primary means of transport",
+      "cityLabel": "City",
+      "cityPlaceholder": "Ex: Paris, Lyon, Marseille...",
+      "mobilityLabel": "Mobility",
+      "mobilityOptions": {
+        "car": "Has vehicle",
+        "public-transport": "Public transport",
+        "bike": "Bike / Scooter",
+        "remote": "Remote work only",
+        "flexible": "Flexible"
+      }
+    },
+    "stepSituation": {
+      "title": "Special situation",
+      "description": "If you have a specific situation to mention, it's here (optional)",
+      "placeholder": "Describe your situation if you wish (optional)...",
+      "privacyNotice": "🔒 This information is confidential and only used to personalize your search results. Ex: disability recognition, career change, returning to work..."
+    },
+    "complete": {
+      "title": "🎉 You're ready to apply!",
+      "description": "Your profile is set up. JobView will help you prepare for interviews and find the best opportunities for you.",
+      "cta": "Let's go!"
+    },
+    "sectors": {
+      "it": "IT / Tech",
+      "hr": "Human Resources",
+      "marketing": "Marketing / Communication",
+      "finance": "Finance / Accounting",
+      "sales": "Sales / Commerce",
+      "construction": "Construction / Building",
+      "health": "Health",
+      "education": "Education / Training",
+      "logistics": "Logistics / Transport",
+      "hospitality": "Hospitality / Catering",
+      "legal": "Law / Legal",
+      "engineering": "Industry / Engineering",
+      "design": "Design / Creation",
+      "agriculture": "Agriculture / Environment"
+    }
   }
 }
