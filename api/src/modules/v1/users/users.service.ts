@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
@@ -112,6 +113,7 @@ export class UsersService {
     }
 
     async checkAvailability(dto: CheckAvailabilityDto, currentUserId?: string): Promise<{ available: boolean }> {
+
         const whereConditions: FindOptionsWhere<User>[] = []; 
 
         if (dto.email) {

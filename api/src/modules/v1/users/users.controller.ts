@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Delete, Get, HttpException, HttpStatus, UseGuards, Param, Patch, Body, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
@@ -19,9 +20,9 @@ export class UsersController {
 
     @UseGuards(JwtAuthGuard)
     @Get('me')
-    async findMe(
+    findMe(
         @GetUser() user: User
-    ): Promise<UserResponseDto> {
+    ): UserResponseDto {
         return plainToInstance(UserResponseDto, user);
     }
 

@@ -19,10 +19,6 @@
       "applyInfo": "La langue sera appliquée à toute l'interface"
     },
     "account": {
-      "profilePictureTitle": "Photo de profil",
-      "profilePictureDescription": "Changez votre avatar ou photo de profil",
-      "changeAvatar": "Changer l'avatar",
-      "avatarInfo": "JPG, PNG ou GIF. Max 5MB.",
       "emailTitle": "Adresse email",
       "emailDescription": "Modifiez votre adresse email",
       "newEmailLabel": "Nouvelle adresse email",
@@ -38,7 +34,19 @@
       "deleteAccount": "Supprimer mon compte",
       "deleteConfirmTitle": "Êtes-vous absolument sûr ?",
       "deleteConfirmDescription": "Cette action est irréversible. Cela supprimera définitivement votre compte et toutes vos données de nos serveurs.",
-      "confirmDelete": "Confirmer la suppression"
+      "confirmDelete": "Confirmer la suppression",
+      "emailUpdateSuccess": "Adresse email mise à jour avec succès",
+      "emailUpdateError": "Erreur lors de la mise à jour de l'email",
+      "passwordUpdateSuccess": "Mot de passe mis à jour avec succès",
+      "passwordUpdateError": "Erreur lors de la mise à jour du mot de passe",
+      "deleteSuccess": "Compte supprimé avec succès",
+      "deleteError": "Erreur lors de la suppression du compte",
+      "saving": "Enregistrement…",
+      "deleting": "Suppression…",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "confirmPasswordLabel": "Confirmer le mot de passe",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "loadingError": "Erreur lors du chargement du profil"
     },
     "notifications": {
       "emailTitle": "Notifications par email",

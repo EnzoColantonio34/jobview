@@ -19,10 +19,6 @@
       "applyInfo": "The language will be applied to the entire interface"
     },
     "account": {
-      "profilePictureTitle": "Profile Picture",
-      "profilePictureDescription": "Change your avatar or profile picture",
-      "changeAvatar": "Change Avatar",
-      "avatarInfo": "JPG, PNG, or GIF. Max 5MB.",
       "emailTitle": "Email Address",
       "emailDescription": "Update your email address",
       "newEmailLabel": "New Email Address",
@@ -38,7 +34,19 @@
       "deleteAccount": "Delete My Account",
       "deleteConfirmTitle": "Are you absolutely sure?",
       "deleteConfirmDescription": "This action is irreversible. It will permanently delete your account and all your data from our servers.",
-      "confirmDelete": "Confirm Deletion"
+      "confirmDelete": "Confirm Deletion",
+      "emailUpdateSuccess": "Email address updated successfully",
+      "emailUpdateError": "Failed to update email address",
+      "passwordUpdateSuccess": "Password updated successfully",
+      "passwordUpdateError": "Failed to update password",
+      "deleteSuccess": "Account deleted successfully",
+      "deleteError": "Failed to delete account",
+      "saving": "Saving…",
+      "deleting": "Deleting…",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm password",
+      "passwordMismatch": "Passwords do not match",
+      "loadingError": "Failed to load profile"
     },
     "notifications": {
       "emailTitle": "Email Notifications",

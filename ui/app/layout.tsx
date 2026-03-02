@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { I18nProvider } from "@/providers/i18n-provider"
 import { AuthProvider } from "@/providers/auth-provider"
+import { QueryProvider } from "@/providers/query-provider"
 import { ClientOnly } from "@/components/client-only"
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
@@ -30,10 +31,12 @@ export default function RootLayout({
         <ThemeProvider>
           <I18nProvider>
             <ClientOnly>
-              <AuthProvider>
-                {children}
-                <Toaster richColors position="top-right" />
-              </AuthProvider>
+              <QueryProvider>
+                <AuthProvider>
+                  {children}
+                  <Toaster richColors position="top-right" />
+                </AuthProvider>
+              </QueryProvider>
               <Analytics />
             </ClientOnly>
           </I18nProvider>

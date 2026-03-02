@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { toast } from "sonner";
 
-import { useAuth } from "@/providers/auth-provider";
+import { useLogin } from "@/hooks/mutations";
 import { loginSchema, type LoginFormValues } from "@/lib/auth-schemas";
 import { ApiError } from "@/lib/api-client";
 
@@ -25,9 +25,8 @@ import {
 
 export function LoginForm() {
   const { t } = useTranslation();
-  const { login } = useAuth();
+  const loginMutation = useLogin();
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -37,19 +36,16 @@ export function LoginForm() {
     },
   });
 
-  const onSubmit = async (values: LoginFormValues) => {
-    setIsSubmitting(true);
-    try {
-      await login(values);
-    } catch (err) {
-      const message =
-        err instanceof ApiError
-          ? err.message
-          : t("auth.errors.generic");
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = (values: LoginFormValues) => {
+    loginMutation.mutate(values, {
+      onError: (err) => {
+        const message =
+          err instanceof ApiError
+            ? err.message
+            : t("auth.errors.generic");
+        toast.error(message);
+      },
+    });
   };
 
   return (
@@ -116,9 +112,9 @@ export function LoginForm() {
         <Button
           type="submit"
           className="w-full bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:opacity-90 transition-opacity"
-          disabled={isSubmitting}
+          disabled={loginMutation.isPending}
         >
-          {isSubmitting ? (
+          {loginMutation.isPending ? (
             <Spinner className="mr-2" />
           ) : (
             <LogIn className="mr-2 h-4 w-4" />
