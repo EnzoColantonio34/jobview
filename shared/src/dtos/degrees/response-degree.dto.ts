@@ -22,11 +22,6 @@ export class DegreeResponseDto {
     endDate: Date;
 
     @Expose()
-    @Type(() => Date)
-    description: Date;
-
-    // @Expose()
-    // @Type(() => CompanyResponseDto) // Transforme l'objet company en CompanyResponseDto
-    // company: CompanyResponseDto;
+    description: string;
 
 }

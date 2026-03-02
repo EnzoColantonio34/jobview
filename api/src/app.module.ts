@@ -10,6 +10,7 @@ import { CompaniesModule } from './modules/v1/companies/companies.module';
 import { InterviewsModule } from './modules/v1/interviews/interviews.module';
 import { DegreesModule } from './modules/v1/degrees/degrees.module';
 import { ExperiencesModule } from './modules/v1/experiences/experiences.module';
+import { UserContextsModule } from './modules/v1/user-contexts/user-contexts.module';
 
 @Module({
     imports: [
@@ -33,7 +34,8 @@ import { ExperiencesModule } from './modules/v1/experiences/experiences.module';
         CompaniesModule,
         InterviewsModule,
         DegreesModule,
-        ExperiencesModule
+        ExperiencesModule,
+        UserContextsModule
     ],
     controllers: [AppController],
     providers: [AppService],

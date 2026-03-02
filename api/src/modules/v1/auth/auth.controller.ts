@@ -18,7 +18,7 @@ export class AuthController {
 
     // #region === GET ===
 
-    @Get('check-availability')
+    @Get('availability')
     async checkAvailabilityPublic(
         @Query() dto: CheckAvailabilityDto
     ): Promise<{ available: boolean }> {

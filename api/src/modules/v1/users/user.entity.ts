@@ -6,9 +6,11 @@ import {
     OneToMany,
     PrimaryColumn,
     BeforeInsert,
+    OneToOne,
 } from 'typeorm';
 import { Company } from '../companies/company.entity';
 import { v7 as uuidv7 } from 'uuid';
+import { UserContext } from '../user-contexts/entities/user-context.entity';
 
 @Entity('users')
 export class User {
@@ -60,4 +62,7 @@ export class User {
     // Un User -> Plusieurs Companies
     @OneToMany(() => Company, (company) => company.user)
     companies: Company[];
+
+    @OneToOne(() => UserContext, (context) => context.user)
+    context: UserContext;
 }
