@@ -32,4 +32,7 @@ export class UserResponseDto {
     @Expose()
     @Type(() => Date) // Garantit que la transformation est bien une Date
     createdAt: Date;
+
+    @Expose()
+    hasCompletedContext: boolean;
 }
