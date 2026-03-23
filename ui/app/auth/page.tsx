@@ -19,14 +19,19 @@ import { Spinner } from "@/components/ui/spinner";
 
 export default function AuthPage() {
   const { t } = useTranslation();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
+      if (user?.hasCompletedContext === false) {
+        router.replace("/onboarding");
+        return;
+      }
+
       router.replace("/");
     }
-  }, [isLoading, isAuthenticated, router]);
+  }, [isLoading, isAuthenticated, user, router]);
 
   if (isLoading) {
     return (

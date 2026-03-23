@@ -18,6 +18,17 @@ export interface UserResponse {
   birthDate: string;
   phoneNumber: string;
   createdAt: string;
+  hasCompletedContext?: boolean;
+}
+
+export interface UserContextResponse {
+  industry: string;
+  degree: string;
+  experienceYears: string;
+  careerSummary: string;
+  location: string;
+  mobilityType: string;
+  specialSituationNote?: string;
 }
 
 export interface RegisterPayload {
@@ -90,6 +101,16 @@ export function clearAuthData(): void {
   localStorage.removeItem(USER_KEY);
 }
 
+export function storeUser(user: UserResponse): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
+export function storeAccessToken(token: string): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(TOKEN_KEY, token);
+}
+
 // ── API Error ──
 
 export class ApiError extends Error {
@@ -108,7 +129,8 @@ export class ApiError extends Error {
 
 async function request<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  skipAuthRefresh = false
 ): Promise<T> {
   const token = getStoredAccessToken();
 
@@ -117,7 +139,7 @@ async function request<T>(
     ...(options.headers as Record<string, string>),
   };
 
-  if (token) {
+  if (token && !headers["Authorization"]) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
@@ -132,6 +154,14 @@ async function request<T>(
   }
 
   if (!res.ok) {
+    if (res.status === 401 && !skipAuthRefresh && endpoint !== "/auth/refresh") {
+      const refreshed = await tryRefreshAccessToken();
+      if (refreshed) {
+        return request<T>(endpoint, options, true);
+      }
+      clearAuthData();
+    }
+
     let errorData: unknown;
     try {
       errorData = await res.json();
@@ -147,6 +177,54 @@ async function request<T>(
 
   return res.json() as Promise<T>;
 }
+
+async function tryRefreshAccessToken(): Promise<boolean> {
+  const refreshToken = getStoredRefreshToken();
+  if (!refreshToken) return false;
+
+  try {
+    const data = await request<{ access_token: string }>(
+      "/auth/refresh",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      },
+      true
+    );
+
+    storeAccessToken(data.access_token);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export interface SaveUserContextPayload {
+  industry: string;
+  degree: string;
+  experienceYears: string;
+  careerSummary: string;
+  location: string;
+  mobilityType: string;
+  specialSituationNote?: string;
+}
+
+export const userContextsApi = {
+  getMine(): Promise<UserContextResponse> {
+    return request<UserContextResponse>("/user-contexts", {
+      method: "GET",
+    });
+  },
+
+  save(payload: SaveUserContextPayload): Promise<UserContextResponse> {
+    return request<UserContextResponse>("/user-contexts", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  }
+};
 
 // ── Auth API ──
 
@@ -173,14 +251,17 @@ export const authApi = {
     });
   },
 
-  refresh(): Promise<{ access_token: string }> {
+  async refresh(): Promise<{ access_token: string }> {
     const refreshToken = getStoredRefreshToken();
-    return request<{ access_token: string }>("/auth/refresh", {
+    const data = await request<{ access_token: string }>("/auth/refresh", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${refreshToken}`,
       },
-    });
+    }, true);
+
+    storeAccessToken(data.access_token);
+    return data;
   },
 
   checkAvailability(

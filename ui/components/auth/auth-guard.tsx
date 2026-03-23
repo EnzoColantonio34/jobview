@@ -1,19 +1,44 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/providers/auth-provider";
 import { Spinner } from "@/components/ui/spinner";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const mustRedirectToOnboarding =
+    isAuthenticated && user?.hasCompletedContext === false && pathname !== "/onboarding";
+  const mustRedirectToHome =
+    isAuthenticated && user?.hasCompletedContext === true && pathname === "/onboarding";
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace("/auth");
+    if (isLoading) {
+      return;
     }
-  }, [isLoading, isAuthenticated, router]);
+
+    if (!isAuthenticated) {
+      router.replace("/auth");
+      return;
+    }
+
+    if (mustRedirectToOnboarding) {
+      router.replace("/onboarding");
+      return;
+    }
+
+    if (mustRedirectToHome) {
+      router.replace("/");
+    }
+  }, [
+    isLoading,
+    isAuthenticated,
+    mustRedirectToOnboarding,
+    mustRedirectToHome,
+    router,
+  ]);
 
   if (isLoading) {
     return (
@@ -29,6 +54,14 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   }
 
   if (!isAuthenticated) {
+    return null;
+  }
+
+  if (mustRedirectToOnboarding) {
+    return null;
+  }
+
+  if (mustRedirectToHome) {
     return null;
   }
 

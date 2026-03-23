@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
@@ -46,6 +47,7 @@ function useDebounce<T>(value: T, delay: number): T {
 
 export function RegisterForm() {
   const { t } = useTranslation();
+  const router = useRouter();
   const { register: registerUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -138,6 +140,7 @@ export function RegisterForm() {
         Object.entries(payload).filter(([, v]) => v !== "" && v !== undefined)
       );
       await registerUser(cleanPayload as typeof payload);
+      router.push("/onboarding");
     } catch (err) {
       const message =
         err instanceof ApiError ? err.message : t("auth.errors.generic");
