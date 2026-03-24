@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:api": "pnpm --filter api run start",
+    "dev:api": "pnpm --filter api run start:dev",
     "dev:ui": "pnpm --filter ui run dev",
-    "dev": "pnpm --parallel --filter api --filter ui run dev",
-    "start": "pnpm --parallel --filter api --filter ui run start",
+    "dev:local": "pnpm run docker:up && pnpm -r --parallel --filter api --filter ui run dev",
+    "dev": "pnpm run docker:up",
+    "start": "pnpm run docker:up",
     "build": "pnpm -r --filter api --filter ui run build"
   },
   "keywords": [],

@@ -3,6 +3,8 @@
 /dist
 */node_modules
 /node_modules
+/ui/.pnpm-store
+/ui/pnpm-lock.yaml
 /build
 .next
 
@@ -57,5 +59,10 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Monorepo caches and generated artifacts
+**/.pnpm-store/
+**/.cache/
+**/.turbo/
 
 *.sqlite

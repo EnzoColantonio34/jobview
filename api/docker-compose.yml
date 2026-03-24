@@ -12,5 +12,24 @@ services:
     volumes:
       - jobview-db:/var/lib/postgresql/data
 
+  api-dev:
+    image: node:20-alpine
+    working_dir: /workspace
+    depends_on:
+      - db
+    volumes:
+      - ../:/workspace:delegated
+      - /workspace/node_modules
+    ports:
+      - '3001:3001'
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      CHOKIDAR_USEPOLLING: 'true'
+    command: sh -c "COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack enable && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack prepare pnpm@10.13.1 --activate && pnpm install --frozen-lockfile && pnpm --filter api run start:dev"
+    tty: true
+
 volumes:
   jobview-db:
