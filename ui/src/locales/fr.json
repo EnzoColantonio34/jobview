@@ -1,0 +1,332 @@
+{
+  "common": {
+    "back": "Retour"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Gérez votre compte, vos préférences et vos paramètres",
+    "menu": {
+      "account": "Compte",
+      "notifications": "Notifications",
+      "language": "Langue",
+      "billing": "Facturation"
+    },
+    "language": {
+      "interfaceTitle": "Langue de l'interface",
+      "interfaceDescription": "Choisissez la langue d'affichage de l'application",
+      "french": "Français",
+      "english": "Anglais",
+      "applyInfo": "La langue sera appliquée à toute l'interface"
+    },
+    "account": {
+      "emailTitle": "Adresse email",
+      "emailDescription": "Modifiez votre adresse email",
+      "newEmailLabel": "Nouvelle adresse email",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "currentEmailInfo": "Votre adresse email actuelle",
+      "edit": "Modifier",
+      "passwordTitle": "Mot de passe",
+      "passwordDescription": "Modifiez votre mot de passe",
+      "changePassword": "Changer le mot de passe",
+      "dangerZoneTitle": "Zone de danger",
+      "dangerZoneDescription": "Supprimez définitivement votre compte",
+      "deleteAccount": "Supprimer mon compte",
+      "deleteConfirmTitle": "Êtes-vous absolument sûr ?",
+      "deleteConfirmDescription": "Cette action est irréversible. Cela supprimera définitivement votre compte et toutes vos données de nos serveurs.",
+      "confirmDelete": "Confirmer la suppression",
+      "emailUpdateSuccess": "Adresse email mise à jour avec succès",
+      "emailUpdateError": "Erreur lors de la mise à jour de l'email",
+      "passwordUpdateSuccess": "Mot de passe mis à jour avec succès",
+      "passwordUpdateError": "Erreur lors de la mise à jour du mot de passe",
+      "deleteSuccess": "Compte supprimé avec succès",
+      "deleteError": "Erreur lors de la suppression du compte",
+      "saving": "Enregistrement…",
+      "deleting": "Suppression…",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "confirmPasswordLabel": "Confirmer le mot de passe",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "loadingError": "Erreur lors du chargement du profil"
+    },
+    "notifications": {
+      "emailTitle": "Notifications par email",
+      "emailDescription": "Recevez des notifications par email",
+      "emailLabel": "Activer les notifications email",
+      "emailInfo": "Recevez des emails pour les événements importants",
+      "pushTitle": "Notifications push web",
+      "pushDescription": "Recevez des notifications dans votre navigateur",
+      "pushLabel": "Activer les notifications push",
+      "pushInfo": "Recevez des alertes en temps réel pour les nouveaux événements",
+      "inAppTitle": "Notifications dans l'application",
+      "inAppDescription": "Recevez des notifications dans l'application",
+      "inAppLabel": "Activer les notifications dans l'application",
+      "inAppInfo": "Affichez les notifications dans l'interface"
+    },
+    "billing": {
+      "currentPlanTitle": "Plan actuel",
+      "currentPlanDescription": "Détails de votre abonnement en cours.",
+      "currentPlanStatus": "Actif",
+      "currentPlanPrice": "29,99€/mois",
+      "currentPlanRenewal": "Prochain renouvellement : 24 décembre 2025",
+      "changePlan": "Changer de plan",
+      "paymentMethodTitle": "Méthode de paiement",
+      "paymentMethodDescription": "Gérez vos méthodes de paiement enregistrées.",
+      "paymentMethodEdit": "Modifier",
+      "paymentMethodAdd": "Ajouter une méthode de paiement",
+      "manageSubscriptionsTitle": "Gérer les abonnements",
+      "manageSubscriptionsDescription": "Gérez vos abonnements actifs",
+      "pauseSubscription": "Mettre en pause mon abonnement",
+      "cancelSubscription": "Résilier mon abonnement",
+      "billingHistoryTitle": "Historique de facturation",
+      "billingHistoryDescription": "Consultez vos factures passées",
+      "download": "Télécharger"
+    }
+  },
+  "nav": {
+    "chat": "Chat LLM",
+    "calendar": "Calendrier",
+    "interviews": "Entretiens",
+    "directory": "Annuaire",
+    "cv": "Télécharger mon CV"
+    },
+    "userMenu": {
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "logout": "Se déconnecter"
+  },
+  "chat": {
+    "welcomeTitle": "Prêt pour votre entretien ?",
+    "welcomeDescription": "Expliquez-moi le contexte de votre entretien et je vous poserai des questions pour vous aider à vous préparer.",
+    "firstInputPlaceholder": "Envoyez votre réponse...",
+    "inputPlaceholder": "Votre réponse..."
+  },
+  "calendar": {
+    "daysOfWeek": {
+      "monday": "Lun",
+      "tuesday": "Mar",
+      "wednesday": "Mer",
+      "thursday": "Jeu",
+      "friday": "Ven",
+      "saturday": "Sam",
+      "sunday": "Dim"
+    }
+  },
+  "upcomingInterviews": {
+    "title": "Mes entretiens",
+    "add": "Ajouter",
+    "noInterviews": "Aucun entretien prévu"
+  },
+  "stats": {
+    "cvSent": "CV Envoyés",
+    "interviews": "Entretiens",
+    "responseRate": "Taux de réponse",
+    "cvSentAndResponses": "CV Envoyés & Réponses",
+    "responses": "Réponses",
+    "typesOfInterviews": "Types d'Entretiens",
+    "applicationStatus": "État des Candidatures"
+  },
+  "company": {
+    "noCompaniesFound": "Aucune entreprise trouvée",
+    "searchPlaceholder": "Rechercher une entreprise...",
+    "add": "Ajouter",
+    "website": "Site web",
+    "contactedOn": "Contacté le",
+    "total": "Total",
+    "interviews": "Entretiens",
+    "offers": "Offres",
+    "rejected": "Rejetés",
+    "status": {
+      "interview": "Entretien",
+      "offer": "Offre",
+      "rejected": "Rejeté",
+      "contacted": "Contacté"
+    }
+  },
+  "auth": {
+    "subtitle": "Préparez vos entretiens comme un pro",
+    "loginTab": "Connexion",
+    "registerTab": "Inscription",
+    "loginTitle": "Bon retour !",
+    "loginDescription": "Connectez-vous à votre compte pour continuer.",
+    "registerTitle": "Créer un compte",
+    "registerDescription": "Inscrivez-vous pour commencer à préparer vos entretiens.",
+    "loginButton": "Se connecter",
+    "registerButton": "S'inscrire",
+    "loginSuccess": "Connexion réussie !",
+    "registerSuccess": "Compte créé avec succès !",
+    "optionalFields": "Informations supplémentaires (optionnel)",
+    "footer": "© 2026 JobView — Tous droits réservés",
+    "fields": {
+      "username": "Nom d'utilisateur",
+      "usernameOrEmail": "Nom d'utilisateur ou email",
+      "email": "Adresse email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phoneNumber": "Téléphone"
+    },
+    "placeholders": {
+      "username": "Entrez votre nom d'utilisateur",
+      "usernameOrEmail": "Votre nom d'utilisateur ou email",
+      "email": "exemple@email.com",
+      "password": "Entrez votre mot de passe",
+      "confirmPassword": "Confirmez votre mot de passe",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phoneNumber": "06 12 34 56 78"
+    },
+    "validation": {
+      "usernameRequired": "Le nom d'utilisateur est requis",
+      "usernameOrEmailRequired": "Le nom d'utilisateur ou l'email est requis",
+      "usernameOrEmailMax": "100 caractères maximum",
+      "usernameMinLength": "3 caractères minimum",
+      "usernameMax": "50 caractères maximum",
+      "emailRequired": "L'adresse email est requise",
+      "emailInvalid": "Adresse email invalide",
+      "emailMax": "100 caractères maximum",
+      "passwordMin": "8 caractères minimum",
+      "passwordMax": "50 caractères maximum",
+      "passwordStrength": "Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&)",
+      "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
+      "passwordsMismatch": "Les mots de passe ne correspondent pas",
+      "firstNameMax": "50 caractères maximum",
+      "lastNameMax": "50 caractères maximum",
+      "phoneInvalid": "Numéro de téléphone français invalide"
+    },
+    "passwordStrength": {
+      "veryWeak": "Très faible",
+      "weak": "Faible",
+      "fair": "Moyen",
+      "strong": "Fort",
+      "veryStrong": "Très fort"
+    },
+    "errors": {
+      "generic": "Une erreur est survenue. Veuillez réessayer.",
+      "usernameTaken": "Ce nom d'utilisateur est déjà pris",
+      "emailTaken": "Cette adresse email est déjà utilisée"
+    }
+  },
+  "onboarding": {
+    "header": {
+      "title": "JobView",
+      "subtitle": "Complète ton profil",
+      "subtitleComplete": "Bienvenue !"
+    },
+    "navigation": {
+      "back": "Retour",
+      "continue": "Continuer",
+      "finish": "Terminer",
+      "loading": "Chargement..."
+    },
+    "feedback": {
+      "sessionExpiredTitle": "Session expirée",
+      "sessionExpiredDescription": "Veuillez vous reconnecter pour terminer l'onboarding.",
+      "saveErrorTitle": "Erreur",
+      "saveErrorDescription": "Une erreur est survenue lors de l'enregistrement."
+    },
+    "steps": {
+      "sector": "Secteur",
+      "diploma": "Diplôme",
+      "experience": "Expérience",
+      "profile": "Profil",
+      "location": "Localisation",
+      "situation": "Situation"
+    },
+    "stepSector": {
+      "title": "Dans quel secteur cherches-tu ?",
+      "description": "Sélectionne ton domaine ou saisis-le directement",
+      "placeholder": "Ex : Informatique, Marketing...",
+      "selected": "Secteur sélectionné : {{sector}}"
+    },
+    "stepDiploma": {
+      "title": "Quel est ton niveau de diplôme ?",
+      "description": "Sélectionne le niveau qui correspond à ton parcours",
+      "levels": {
+        "none": "Sans diplôme",
+        "cap-bep": "CAP / BEP",
+        "bac": "Baccalauréat",
+        "bac+2": "Bac +2 (BTS, DUT)",
+        "bac+3": "Bac +3 (Licence)",
+        "bac+5": "Bac +5 (Master, Ingénieur)",
+        "bac+8": "Bac +8 (Doctorat)"
+      }
+    },
+    "stepExperience": {
+      "title": "Combien d'années d'expérience ?",
+      "description": "Indique ton niveau d'expérience professionnelle",
+      "options": {
+        "0": {
+          "label": "Aucune expérience",
+          "subtitle": "Débutant / Étudiant"
+        },
+        "1": {
+          "label": "Moins d'1 an",
+          "subtitle": "Stage / Alternance"
+        },
+        "1-3": {
+          "label": "1 à 3 ans",
+          "subtitle": "Junior"
+        },
+        "3-5": {
+          "label": "3 à 5 ans",
+          "subtitle": "Confirmé"
+        },
+        "5-10": {
+          "label": "5 à 10 ans",
+          "subtitle": "Senior"
+        },
+        "10+": {
+          "label": "Plus de 10 ans",
+          "subtitle": "Expert"
+        }
+      }
+    },
+    "stepDescription": {
+      "title": "Parle-nous de toi",
+      "description": "Décris brièvement ton parcours et ce que tu recherches",
+      "placeholder": "Ex : Diplômé d'un Master en informatique, je recherche un poste de développeur fullstack en CDI. J'ai 2 ans d'expérience en alternance..."
+    },
+    "stepLocation": {
+      "title": "Où te situes-tu ?",
+      "description": "Indique ta ville et ton moyen de transport principal",
+      "cityLabel": "Ville",
+      "cityPlaceholder": "Ex : Paris, Lyon, Marseille...",
+      "mobilityLabel": "Mobilité",
+      "mobilityOptions": {
+        "car": "Véhiculé(e)",
+        "public-transport": "Transports en commun",
+        "bike": "Vélo / Trottinette",
+        "remote": "Télétravail uniquement",
+        "flexible": "Flexible"
+      }
+    },
+    "stepSituation": {
+      "title": "Situation particulière",
+      "description": "Si tu as une situation spécifique à signaler, c'est ici (facultatif)",
+      "placeholder": "Décris ta situation si tu le souhaites (facultatif)...",
+      "privacyNotice": "🔒 Ces informations sont confidentielles et servent uniquement à personnaliser tes résultats de recherche. Ex : RQTH, situation de handicap, reconversion professionnelle, reprise d'activité..."
+    },
+    "complete": {
+      "title": "🎉 Tu es prêt à postuler !",
+      "description": "Ton profil est configuré. JobView va pouvoir t'aider à préparer tes entretiens et trouver les meilleures opportunités pour toi.",
+      "cta": "C'est parti !"
+    },
+    "sectors": {
+      "it": "Informatique / Tech",
+      "hr": "Ressources Humaines",
+      "marketing": "Marketing / Communication",
+      "finance": "Finance / Comptabilité",
+      "sales": "Commerce / Vente",
+      "construction": "BTP / Construction",
+      "health": "Santé",
+      "education": "Éducation / Formation",
+      "logistics": "Logistique / Transport",
+      "hospitality": "Hôtellerie / Restauration",
+      "legal": "Droit / Juridique",
+      "engineering": "Industrie / Ingénierie",
+      "design": "Design / Création",
+      "agriculture": "Agriculture / Environnement"
+    }
+  }
+}

@@ -1,0 +1,332 @@
+{
+  "common": {
+    "back": "Back"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account, preferences, and settings",
+    "menu": {
+      "account": "Account",
+      "notifications": "Notifications",
+      "language": "Language",
+      "billing": "Billing"
+    },
+    "language": {
+      "interfaceTitle": "Interface Language",
+      "interfaceDescription": "Choose the display language of the application",
+      "french": "French",
+      "english": "English",
+      "applyInfo": "The language will be applied to the entire interface"
+    },
+    "account": {
+      "emailTitle": "Email Address",
+      "emailDescription": "Update your email address",
+      "newEmailLabel": "New Email Address",
+      "save": "Save",
+      "cancel": "Cancel",
+      "currentEmailInfo": "Your current email address",
+      "edit": "Edit",
+      "passwordTitle": "Password",
+      "passwordDescription": "Update your password",
+      "changePassword": "Change Password",
+      "dangerZoneTitle": "Danger Zone",
+      "dangerZoneDescription": "Permanently delete your account",
+      "deleteAccount": "Delete My Account",
+      "deleteConfirmTitle": "Are you absolutely sure?",
+      "deleteConfirmDescription": "This action is irreversible. It will permanently delete your account and all your data from our servers.",
+      "confirmDelete": "Confirm Deletion",
+      "emailUpdateSuccess": "Email address updated successfully",
+      "emailUpdateError": "Failed to update email address",
+      "passwordUpdateSuccess": "Password updated successfully",
+      "passwordUpdateError": "Failed to update password",
+      "deleteSuccess": "Account deleted successfully",
+      "deleteError": "Failed to delete account",
+      "saving": "Saving…",
+      "deleting": "Deleting…",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm password",
+      "passwordMismatch": "Passwords do not match",
+      "loadingError": "Failed to load profile"
+    },
+    "notifications": {
+      "emailTitle": "Email Notifications",
+      "emailDescription": "Receive notifications by email",
+      "emailLabel": "Enable email notifications",
+      "emailInfo": "Receive emails for important events",
+      "pushTitle": "Web Push Notifications",
+      "pushDescription": "Receive notifications in your browser",
+      "pushLabel": "Enable push notifications",
+      "pushInfo": "Get real-time alerts for new events",
+      "inAppTitle": "In-app Notifications",
+      "inAppDescription": "Receive notifications in the app",
+      "inAppLabel": "Enable in-app notifications",
+      "inAppInfo": "Show notifications in the interface"
+    },
+    "billing": {
+      "currentPlanTitle": "Current Plan",
+      "currentPlanDescription": "Details about your current subscription plan.",
+      "currentPlanStatus": "Active",
+      "currentPlanPrice": "$29.99/month",
+      "currentPlanRenewal": "Next renewal: December 24, 2025",
+      "changePlan": "Change Plan",
+      "paymentMethodTitle": "Payment Method",
+      "paymentMethodDescription": "Manage your saved payment methods.",
+      "paymentMethodEdit": "Edit",
+      "paymentMethodAdd": "Add Payment Method",
+      "manageSubscriptionsTitle": "Manage Subscriptions",
+      "manageSubscriptionsDescription": "Manage your active subscriptions",
+      "pauseSubscription": "Pause My Subscription",
+      "cancelSubscription": "Cancel My Subscription",
+      "billingHistoryTitle": "Billing History",
+      "billingHistoryDescription": "View your past invoices",
+      "download": "Download"
+    }
+  },
+  "nav": {
+    "chat": "LLM Chat",
+    "calendar": "Calendar",
+    "interviews": "Interviews",
+    "directory": "Directory",
+    "cv": "Download my CV"
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Log out"
+  },
+  "chat": {
+    "welcomeTitle": "Ready for your interview?",
+    "welcomeDescription": "Explain the context of your interview and I will ask you questions to help you prepare.",
+    "firstInputPlaceholder": "Send your answer...",
+    "inputPlaceholder": "Your answer..."
+  },
+  "calendar": {
+    "daysOfWeek": {
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat",
+      "sunday": "Sun"
+    }
+  },
+  "upcomingInterviews": {
+    "title": "My Interviews",
+    "add": "Add",
+    "noInterviews": "No interviews scheduled"
+  },
+  "stats": {
+    "cvSent": "CVs Sent",
+    "interviews": "Interviews",
+    "responseRate": "Response Rate",
+    "cvSentAndResponses": "CVs Sent & Responses",
+    "responses": "Responses",
+    "typesOfInterviews": "Types of Interviews",
+    "applicationStatus": "Application Status"
+  },
+  "company": {
+    "noCompaniesFound": "No companies found",
+    "searchPlaceholder": "Search for a company...",
+    "add": "Add",
+    "website": "Website",
+    "contactedOn": "Contacted on",
+    "total": "Total",
+    "interviews": "Interviews",
+    "offers": "Offers",
+    "rejected": "Rejected",
+    "status": {
+      "interview": "Interview",
+      "offer": "Offer",
+      "rejected": "Rejected",
+      "contacted": "Contacted"
+    }
+  },
+  "auth": {
+    "subtitle": "Prepare for your interviews like a pro",
+    "loginTab": "Login",
+    "registerTab": "Sign up",
+    "loginTitle": "Welcome back!",
+    "loginDescription": "Sign in to your account to continue.",
+    "registerTitle": "Create an account",
+    "registerDescription": "Sign up to start preparing for your interviews.",
+    "loginButton": "Sign in",
+    "registerButton": "Sign up",
+    "loginSuccess": "Successfully signed in!",
+    "registerSuccess": "Account created successfully!",
+    "optionalFields": "Additional information (optional)",
+    "footer": "© 2026 JobView — All rights reserved",
+    "fields": {
+      "username": "Username",
+      "usernameOrEmail": "Username or email",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phoneNumber": "Phone number"
+    },
+    "placeholders": {
+      "username": "Enter your username",
+      "usernameOrEmail": "Your username or email",
+      "email": "example@email.com",
+      "password": "Enter your password",
+      "confirmPassword": "Confirm your password",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phoneNumber": "+33 6 12 34 56 78"
+    },
+    "validation": {
+      "usernameRequired": "Username is required",
+      "usernameOrEmailRequired": "Username or email is required",
+      "usernameOrEmailMax": "Maximum 100 characters",
+      "usernameMinLength": "Minimum 3 characters",
+      "usernameMax": "Maximum 50 characters",
+      "emailRequired": "Email address is required",
+      "emailInvalid": "Invalid email address",
+      "emailMax": "Maximum 100 characters",
+      "passwordMin": "Minimum 8 characters",
+      "passwordMax": "Maximum 50 characters",
+      "passwordStrength": "Password must contain an uppercase, a lowercase, a digit and a special character (@$!%*?&)",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsMismatch": "Passwords do not match",
+      "firstNameMax": "Maximum 50 characters",
+      "lastNameMax": "Maximum 50 characters",
+      "phoneInvalid": "Invalid French phone number"
+    },
+    "passwordStrength": {
+      "veryWeak": "Very weak",
+      "weak": "Weak",
+      "fair": "Fair",
+      "strong": "Strong",
+      "veryStrong": "Very strong"
+    },
+    "errors": {
+      "generic": "An error occurred. Please try again.",
+      "usernameTaken": "This username is already taken",
+      "emailTaken": "This email address is already in use"
+    }
+  },
+  "onboarding": {
+    "header": {
+      "title": "JobView",
+      "subtitle": "Complete your profile",
+      "subtitleComplete": "Welcome!"
+    },
+    "navigation": {
+      "back": "Back",
+      "continue": "Continue",
+      "finish": "Finish",
+      "loading": "Loading..."
+    },
+    "feedback": {
+      "sessionExpiredTitle": "Session expired",
+      "sessionExpiredDescription": "Please sign in again to complete onboarding.",
+      "saveErrorTitle": "Error",
+      "saveErrorDescription": "An error occurred while saving."
+    },
+    "steps": {
+      "sector": "Sector",
+      "diploma": "Diploma",
+      "experience": "Experience",
+      "profile": "Profile",
+      "location": "Location",
+      "situation": "Situation"
+    },
+    "stepSector": {
+      "title": "What sector are you looking for?",
+      "description": "Select your field or type it directly",
+      "placeholder": "Ex: IT, Marketing...",
+      "selected": "Selected sector: {{sector}}"
+    },
+    "stepDiploma": {
+      "title": "What is your diploma level?",
+      "description": "Select the level that matches your background",
+      "levels": {
+        "none": "No diploma",
+        "cap-bep": "CAP / BEP",
+        "bac": "Baccalaureate",
+        "bac+2": "Associate Degree (2 years)",
+        "bac+3": "Bachelor's Degree (3 years)",
+        "bac+5": "Master's Degree (5 years)",
+        "bac+8": "PhD (8 years)"
+      }
+    },
+    "stepExperience": {
+      "title": "How many years of experience?",
+      "description": "Indicate your professional experience level",
+      "options": {
+        "0": {
+          "label": "No experience",
+          "subtitle": "Beginner / Student"
+        },
+        "1": {
+          "label": "Less than 1 year",
+          "subtitle": "Internship / Apprenticeship"
+        },
+        "1-3": {
+          "label": "1 to 3 years",
+          "subtitle": "Junior"
+        },
+        "3-5": {
+          "label": "3 to 5 years",
+          "subtitle": "Confirmed"
+        },
+        "5-10": {
+          "label": "5 to 10 years",
+          "subtitle": "Senior"
+        },
+        "10+": {
+          "label": "More than 10 years",
+          "subtitle": "Expert"
+        }
+      }
+    },
+    "stepDescription": {
+      "title": "Tell us about yourself",
+      "description": "Briefly describe your background and what you're looking for",
+      "placeholder": "Ex: Master's degree in computer science, looking for a fullstack developer position. I have 2 years of experience from my apprenticeship..."
+    },
+    "stepLocation": {
+      "title": "Where are you located?",
+      "description": "Indicate your city and primary means of transport",
+      "cityLabel": "City",
+      "cityPlaceholder": "Ex: Paris, Lyon, Marseille...",
+      "mobilityLabel": "Mobility",
+      "mobilityOptions": {
+        "car": "Has vehicle",
+        "public-transport": "Public transport",
+        "bike": "Bike / Scooter",
+        "remote": "Remote work only",
+        "flexible": "Flexible"
+      }
+    },
+    "stepSituation": {
+      "title": "Special situation",
+      "description": "If you have a specific situation to mention, it's here (optional)",
+      "placeholder": "Describe your situation if you wish (optional)...",
+      "privacyNotice": "🔒 This information is confidential and only used to personalize your search results. Ex: disability recognition, career change, returning to work..."
+    },
+    "complete": {
+      "title": "🎉 You're ready to apply!",
+      "description": "Your profile is set up. JobView will help you prepare for interviews and find the best opportunities for you.",
+      "cta": "Let's go!"
+    },
+    "sectors": {
+      "it": "IT / Tech",
+      "hr": "Human Resources",
+      "marketing": "Marketing / Communication",
+      "finance": "Finance / Accounting",
+      "sales": "Sales / Commerce",
+      "construction": "Construction / Building",
+      "health": "Health",
+      "education": "Education / Training",
+      "logistics": "Logistics / Transport",
+      "hospitality": "Hospitality / Catering",
+      "legal": "Law / Legal",
+      "engineering": "Industry / Engineering",
+      "design": "Design / Creation",
+      "agriculture": "Agriculture / Environment"
+    }
+  }
+}
