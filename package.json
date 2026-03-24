@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:api": "pnpm --filter api run start",
+    "dev:api": "pnpm --filter api run start:dev",
     "dev:ui": "pnpm --filter ui run dev",
-    "dev": "pnpm --parallel --filter api --filter ui run dev",
-    "start": "pnpm --parallel --filter api --filter ui run start",
-    "build": "pnpm -r --filter api --filter ui run build"
+    "dev:local": "pnpm run docker:up && pnpm -r --parallel --filter api --filter ui run dev",
+    "dev": "pnpm run docker:up",
+    "start": "pnpm run docker:up",
+    "build": "pnpm -r --filter api --filter ui run build",
+    "docker:up": "docker compose -f api/docker-compose.yml -f ui/docker-compose.yml up -d",
+    "docker:down": "docker compose -f api/docker-compose.yml -f ui/docker-compose.yml down"
   },
   "keywords": [],
   "author": "",
