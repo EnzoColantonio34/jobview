@@ -20,10 +20,13 @@ services:
   # Production service: build then serve with Next standalone runtime
   ui-prod:
     build:
-      context: .
+      context: ..
+      dockerfile: ui/Dockerfile
       target: runner
     ports:
       - "5173:3000"
+    environment:
+      - API_BACKEND_URL=${API_BACKEND_URL}
     restart: unless-stopped
 
 networks:
