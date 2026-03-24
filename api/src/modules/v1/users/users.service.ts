@@ -193,4 +193,11 @@ export class UsersService {
         return true;
     }
 
+    async findOneWithDetails(id: string) {
+        return this.userRepository.findOne({
+            where: { id },
+            relations: ['degrees', 'experiences'], // CRUCIAL pour ne pas avoir de tableaux vides
+        });
+    }
+
 }

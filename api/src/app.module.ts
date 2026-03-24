@@ -11,6 +11,7 @@ import { InterviewsModule } from './modules/v1/interviews/interviews.module';
 import { DegreesModule } from './modules/v1/degrees/degrees.module';
 import { ExperiencesModule } from './modules/v1/experiences/experiences.module';
 import { UserContextsModule } from './modules/v1/user-contexts/user-contexts.module';
+import { ChatModule } from './modules/v1/chat/chat.module';
 
 @Module({
     imports: [
@@ -20,8 +21,12 @@ import { UserContextsModule } from './modules/v1/user-contexts/user-contexts.mod
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => ({
-                type: 'sqlite',
-                database: configService.get<string>('DATABASE_NAME'), 
+                type: 'postgres',
+                host: configService.get<string>('DB_HOST', 'localhost'),
+                port: configService.get<number>('DB_PORT', 5433),
+                username: configService.get<string>('DB_USER'),
+                password: configService.get<string>('DB_PASSWORD'),
+                database: configService.get<string>('DB_NAME'),
                 autoLoadEntities: true,
                 synchronize: true,
 
@@ -35,7 +40,8 @@ import { UserContextsModule } from './modules/v1/user-contexts/user-contexts.mod
         InterviewsModule,
         DegreesModule,
         ExperiencesModule,
-        UserContextsModule
+        UserContextsModule,
+        ChatModule
     ],
     controllers: [AppController],
     providers: [AppService],
