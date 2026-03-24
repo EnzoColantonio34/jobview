@@ -5,12 +5,14 @@ import { plainToInstance } from 'class-transformer';
 import { User } from '../users/user.entity';
 import * as bcrypt from 'bcryptjs';
 import { AuthResponseDto, CreateUserDto, LoginDto, UserResponseDto } from '@jobview/shared';
+import { UserContextsService } from '../user-contexts/user-contexts.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
+        private readonly userContextsService: UserContextsService,
     ) {}
 
     /**
@@ -31,7 +33,12 @@ export class AuthService {
 
         const access_token = this._generateAccessToken(user);
         const refresh_token = await this._generateRefreshToken(user);
-        const filteredUser = plainToInstance(UserResponseDto, user);
+        // const filteredUser = plainToInstance(UserResponseDto, user);
+
+        const filteredUser = plainToInstance(UserResponseDto, {
+            ...user,
+            hasCompletedContext: false, 
+        });
 
         return {
             message: 'User registered successfully',
@@ -48,9 +55,17 @@ export class AuthService {
             throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
         }
 
+        const context = await this.userContextsService.checkIfContextExists(user.id);
+        const hasCompletedContext = !!context;
+
         const access_token = this._generateAccessToken(user);
         const refresh_token = await this._generateRefreshToken(user);
-        const filteredUser = plainToInstance(UserResponseDto, user);
+        // const filteredUser = plainToInstance(UserResponseDto, user);
+
+        const filteredUser = plainToInstance(UserResponseDto, {
+            ...user,
+            hasCompletedContext
+        });
 
         return {
             message: 'Login successful',

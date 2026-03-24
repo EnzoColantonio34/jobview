@@ -27,7 +27,7 @@ export class UsersController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('check-availability')
+    @Get('availability')
     async checkAvailability(
         @GetUser() user: User,
         @Query() dto: CheckAvailabilityDto

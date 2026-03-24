@@ -1,5 +1,3 @@
-// Configuration centralisée des couleurs et tokens du design
-
 export const jobViewTheme = {
   colors: {
     primary: {

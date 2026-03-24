@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
@@ -48,6 +49,7 @@ function useDebounce<T>(value: T, delay: number): T {
 export function RegisterForm() {
   const { t } = useTranslation();
   const registerMutation = useRegister();
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showOptional, setShowOptional] = useState(false);
@@ -95,19 +97,19 @@ export function RegisterForm() {
   const emailAvailable = emailQuery.data?.available ?? null;
   const checkingUsername = usernameQuery.isFetching;
   const checkingEmail = emailQuery.isFetching;
-
-  const onSubmit = (values: RegisterFormValues) => {
+  const onSubmit = async (values: RegisterFormValues) => {
     const { confirmPassword, ...payload } = values;
     const cleanPayload = Object.fromEntries(
       Object.entries(payload).filter(([, v]) => v !== "" && v !== undefined)
     );
-    registerMutation.mutate(cleanPayload as typeof payload, {
-      onError: (err) => {
-        const message =
-          err instanceof ApiError ? err.message : t("auth.errors.generic");
-        toast.error(message);
-      },
-    });
+    try {
+      await registerMutation.mutateAsync(cleanPayload as typeof payload);
+      router.push("/onboarding");
+    } catch (err) {
+      const message =
+        err instanceof ApiError ? err.message : t("auth.errors.generic");
+      toast.error(message);
+    }
   };
 
   const AvailabilityIndicator = ({

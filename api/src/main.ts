@@ -20,6 +20,7 @@ async function bootstrap() {
 
     // Validation globale des DTOs
     app.useGlobalPipes(new ValidationPipe({
+        errorHttpStatusCode: 422,
         whitelist: true,
         forbidNonWhitelisted: true,
         transform: true,

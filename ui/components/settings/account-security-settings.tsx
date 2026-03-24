@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,6 +22,12 @@ export function AccountSecuritySettings() {
   const [isEditingPassword, setIsEditingPassword] = useState(false)
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+
+  useEffect(() => {
+    if (!isEditingEmail) {
+      setEmail(user?.email ?? "")
+    }
+  }, [user?.email, isEditingEmail])
 
   function handleSaveEmail() {
     if (!email || email === user?.email) {
@@ -71,6 +77,10 @@ export function AccountSecuritySettings() {
   }
 
   function handleDeleteAccount() {
+    if (deleteMe.isPending) {
+      return
+    }
+
     deleteMe.mutate()
   }
 
@@ -206,9 +216,10 @@ export function AccountSecuritySettings() {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>{t("settings.account.cancel")}</AlertDialogCancel>
+                <AlertDialogCancel disabled={deleteMe.isPending}>{t("settings.account.cancel")}</AlertDialogCancel>
                 <AlertDialogAction
                   className="bg-destructive hover:bg-destructive/90"
+                  disabled={deleteMe.isPending}
                   onClick={handleDeleteAccount}
                 >
                   {t("settings.account.confirmDelete")}

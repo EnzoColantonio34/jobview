@@ -10,11 +10,14 @@ import React, {
 } from "react";
 import {
   authApi,
+  userContextsApi,
   storeAuthData,
   updateStoredUser,
+  storeUser,
   clearAuthData,
   getStoredAccessToken,
   getStoredUser,
+  ApiError,
   type UserResponse,
   type RegisterPayload,
   type LoginPayload,
@@ -28,6 +31,7 @@ interface AuthContextType {
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: UserResponse) => void;
+  markContextCompleted: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -39,10 +43,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const token = getStoredAccessToken();
     const storedUser = getStoredUser();
-    if (token && storedUser) {
-      setUser(storedUser);
+
+    if (!token || !storedUser) {
+      setIsLoading(false);
+      return;
     }
-    setIsLoading(false);
+
+    let isMounted = true;
+
+    const hydrateUser = async () => {
+      try {
+        await authApi.refresh();
+
+        let hasCompletedContext = storedUser.hasCompletedContext;
+        try {
+          await userContextsApi.getMine();
+          hasCompletedContext = true;
+        } catch (error) {
+          if (error instanceof ApiError && error.status === 404) {
+            hasCompletedContext = false;
+          } else {
+            throw error;
+          }
+        }
+
+        if (!isMounted) return;
+        setUser({
+          ...storedUser,
+          hasCompletedContext,
+        });
+      } catch {
+        if (!isMounted) return;
+        clearAuthData();
+        setUser(null);
+      } finally {
+        if (!isMounted) return;
+        setIsLoading(false);
+      }
+    };
+
+    hydrateUser();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const login = useCallback(async (payload: LoginPayload) => {
@@ -73,6 +117,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(updatedUser);
   }, []);
 
+  const markContextCompleted = useCallback(() => {
+    setUser((currentUser) => {
+      if (!currentUser) {
+        return currentUser;
+      }
+
+      const updatedUser = {
+        ...currentUser,
+        hasCompletedContext: true,
+      };
+      storeUser(updatedUser);
+      return updatedUser;
+    });
+  }, []);
+
   const value = useMemo<AuthContextType>(
     () => ({
       user,
@@ -82,8 +141,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       register,
       logout,
       setUser: handleSetUser,
+      markContextCompleted,
     }),
-    [user, isLoading, login, register, logout, handleSetUser]
+    [
+      user,
+      isLoading,
+      login,
+      register,
+      logout,
+      handleSetUser,
+      markContextCompleted,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

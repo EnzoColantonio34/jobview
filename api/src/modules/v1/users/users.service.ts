@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
@@ -113,7 +112,6 @@ export class UsersService {
     }
 
     async checkAvailability(dto: CheckAvailabilityDto, currentUserId?: string): Promise<{ available: boolean }> {
-
         const whereConditions: FindOptionsWhere<User>[] = []; 
 
         if (dto.email) {
@@ -172,13 +170,11 @@ export class UsersService {
      */
     async setCurrentHashedRefreshToken(uuid: string, hashedToken: string | null): Promise<void> {
         if (hashedToken == null) {
-            console.log("logout")
             await this.userRepository.update(
                 { id: uuid, currentHashedRefreshToken: Not(IsNull()) }, // Condition : seulement si non null
                 { currentHashedRefreshToken: hashedToken }
             );
         } else {
-            console.log("login")
             await this.userRepository.update(uuid, {
                 currentHashedRefreshToken: hashedToken,
             });

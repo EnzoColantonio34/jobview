@@ -44,9 +44,9 @@ export function useDeleteMe() {
     mutationFn: () => usersApi.deleteMe(),
     onSuccess: async () => {
       toast.success(t("settings.account.deleteSuccess"));
+      await logout();
       clearAuthData();
       queryClient.clear();
-      await logout();
     },
     onError: (err) => {
       const message =

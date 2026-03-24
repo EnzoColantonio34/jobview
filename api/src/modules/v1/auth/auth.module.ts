@@ -7,11 +7,13 @@ import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtRefreshStrategy } from './jwt/jwt-refresh.strategy';
+import { UserContextsModule } from '../user-contexts/user-contexts.module';
 
 @Module({
     imports: [
         UsersModule,
         PassportModule,
+        UserContextsModule,
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
