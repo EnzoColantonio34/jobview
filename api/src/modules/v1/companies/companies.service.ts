@@ -17,9 +17,9 @@ export class CompaniesService {
     async findAll(): Promise<CompanyResponseDto[]> {
         const companies = await this.companyRepository.find({
             withDeleted: true,
-            // (Optionnel) Tu peux trier pour voir les supprimés à la fin ou au début
+            // (Optionnel) 
             // order: {
-            //     deletedAt: 'ASC', // NULLs (actifs) en premier généralement
+            //     deletedAt: 'ASC', 
             //     name: 'ASC'
             // }
         });

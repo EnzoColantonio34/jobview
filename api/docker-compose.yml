@@ -12,11 +12,40 @@ services:
     volumes:
       - jobview-db:/var/lib/postgresql/data
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: jobview-ollama
+    restart: unless-stopped
+    ports:
+      - '11434:11434'
+    volumes:
+      - jobview-ollama:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    container_name: jobview-ollama-pull
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2:3b}
+    entrypoint: ["/bin/sh", "-c"]
+    command: ['ollama pull "$$OLLAMA_MODEL"']
+    restart: "no"
+
   api-dev:
     image: node:20-alpine
     working_dir: /workspace
     depends_on:
       - db
+      - ollama
     volumes:
       - ../:/workspace:delegated
       - /workspace/node_modules
@@ -27,9 +56,12 @@ services:
     environment:
       DB_HOST: db
       DB_PORT: 5432
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2:3b}
       CHOKIDAR_USEPOLLING: 'true'
     command: sh -c "COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack enable && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack prepare pnpm@10.13.1 --activate && pnpm install --frozen-lockfile && pnpm --filter api run start:dev"
     tty: true
 
 volumes:
   jobview-db:
+  jobview-ollama:

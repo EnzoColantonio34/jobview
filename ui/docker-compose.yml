@@ -17,8 +17,10 @@ services:
     command: sh -c "COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack enable && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack prepare pnpm@10.13.1 --activate && pnpm install --frozen-lockfile && pnpm --filter ui exec next dev -H 0.0.0.0 -p 5173"
     tty: true
 
-  # Production service: build then serve with Next standalone runtime
+  # Production service: build then serve with Next standalone runtime.
+  # Opt-in via `docker compose --profile prod up` so it doesn't clash with ui-dev on port 5173.
   ui-prod:
+    profiles: ["prod"]
     build:
       context: ..
       dockerfile: ui/Dockerfile

@@ -27,11 +27,6 @@ export class ExperiencesController {
         return this.experiencesService.create(createExperienceDto, user.id);
     }
 
-    // @Get()
-    // findAll() {
-    //     return this.experiencesService.findAll();
-    // }
-
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.experiencesService.findOne(+id);

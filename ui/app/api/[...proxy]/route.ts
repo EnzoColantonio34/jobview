@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.API_BACKEND_URL as string;
-if (!BACKEND_URL) throw new Error("Missing env variable: API_BACKEND_URL");
-
 export async function GET(req: NextRequest, { params }: { params: Promise<{ proxy: string[] }> }) {
   return proxy(req, await params);
 }
@@ -23,8 +20,10 @@ async function proxy(
   req: NextRequest,
   params: { proxy: string[] }
 ) {
+  const backendUrl = process.env.API_BACKEND_URL;
+  if (!backendUrl) throw new Error("Missing env variable: API_BACKEND_URL");
   const suffix = params.proxy.join("/");
-  const base = BACKEND_URL.replace(/\/$/, "");
+  const base = backendUrl.replace(/\/$/, "");
   const url = new URL(`${base}/${suffix}`);
 
   req.nextUrl.searchParams.forEach((value, key) => {

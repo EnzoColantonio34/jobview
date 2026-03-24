@@ -6,51 +6,58 @@ import { ChatInput } from "@/components/chat/chat-input"
 import { ChatWelcome } from "@/components/chat/chat-welcome"
 import { THEME_TEMPLATES } from "@/config/theme-templates"
 import { useTranslation } from "react-i18next"
-
-const interviewQuestions = [
-  "Parlez-moi de vos plus grands accomplissements professionnels.",
-  "Comment avez-vous surmonté une situation difficile au travail?",
-  "Décrivez votre approche pour apprendre une nouvelle technologie.",
-  "Que savez-vous de notre entreprise et pourquoi voulez-vous y travailler?",
-  "Comment travaillez-vous en équipe?",
-  "Quels sont vos points forts et faibles?",
-  "Où vous voyez-vous dans 5 ans?",
-  "Comment gérez-vous les délais serrés?",
-  "Pouvez-vous me parler d'une fois où vous avez échoué?",
-  "Qu'est-ce qui vous motive dans un rôle?",
-]
+import { chatApi, ApiError } from "@/lib/api-client"
 
 export function LLMChat() {
   const { t } = useTranslation()
   const [messages, setMessages] = useState<Message[]>([])
+  const [chatId, setChatId] = useState<string | null>(null)
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!input.trim()) return
+    if (!input.trim() || isLoading) return
 
-    const isFirstMessage = messages.length === 0
-
+    const userContent = input
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: input,
+      content: userContent,
     }
     setMessages((prev) => [...prev, userMessage])
     setInput("")
     setIsLoading(true)
 
-    setTimeout(() => {
-      const randomQuestion = interviewQuestions[Math.floor(Math.random() * interviewQuestions.length)]
+    try {
+      let assistantContent: string
+      if (chatId === null) {
+        const res = await chatApi.start(userContent)
+        setChatId(res.chatId)
+        assistantContent = res.firstMessage
+      } else {
+        const res = await chatApi.sendMessage(chatId, userContent)
+        assistantContent = res.text
+      }
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: isFirstMessage ? randomQuestion : `Bonne réponse! Voici ma question suivante: ${randomQuestion}`,
+        content: assistantContent,
       }
       setMessages((prev) => [...prev, assistantMessage])
+    } catch (err) {
+      const errorContent =
+        err instanceof ApiError ? err.message : t("chat.error")
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: errorContent,
+      }
+      setMessages((prev) => [...prev, assistantMessage])
+    } finally {
       setIsLoading(false)
-    }, 800)
+    }
   }
 
   return (

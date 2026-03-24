@@ -33,7 +33,6 @@ export class AuthService {
 
         const access_token = this._generateAccessToken(user);
         const refresh_token = await this._generateRefreshToken(user);
-        // const filteredUser = plainToInstance(UserResponseDto, user);
 
         const filteredUser = plainToInstance(UserResponseDto, {
             ...user,
@@ -60,7 +59,6 @@ export class AuthService {
 
         const access_token = this._generateAccessToken(user);
         const refresh_token = await this._generateRefreshToken(user);
-        // const filteredUser = plainToInstance(UserResponseDto, user);
 
         const filteredUser = plainToInstance(UserResponseDto, {
             ...user,

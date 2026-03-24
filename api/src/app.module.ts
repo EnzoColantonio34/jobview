@@ -12,6 +12,7 @@ import { DegreesModule } from './modules/v1/degrees/degrees.module';
 import { ExperiencesModule } from './modules/v1/experiences/experiences.module';
 import { UserContextsModule } from './modules/v1/user-contexts/user-contexts.module';
 import { ChatModule } from './modules/v1/chat/chat.module';
+import { MessagesModule } from './modules/v1/messages/messages.module';
 
 @Module({
     imports: [
@@ -41,7 +42,8 @@ import { ChatModule } from './modules/v1/chat/chat.module';
         DegreesModule,
         ExperiencesModule,
         UserContextsModule,
-        ChatModule
+        ChatModule,
+        MessagesModule,
     ],
     controllers: [AppController],
     providers: [AppService],

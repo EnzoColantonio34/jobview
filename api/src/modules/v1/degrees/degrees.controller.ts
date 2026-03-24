@@ -28,11 +28,6 @@ export class DegreesController {
         return this.degreesService.create(createDegreeDto, user.id);
     }
 
-    // @Get(':id')
-    // findOne(@Param('id') id: string) {
-    //     return this.degreesService.findOne(+id);
-    // }
-
     @UseGuards(JwtAuthGuard)
     @Patch(':id')
     async update(

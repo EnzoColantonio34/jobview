@@ -242,6 +242,33 @@ export const userContextsApi = {
   }
 };
 
+// ── Chat (LLM) API ──
+
+export interface StartChatResponse {
+  chatId: string;
+  firstMessage: string;
+}
+
+export interface ContinueChatResponse {
+  text: string;
+}
+
+export const chatApi = {
+  start(jobTitle: string): Promise<StartChatResponse> {
+    return request<StartChatResponse>("/chat", {
+      method: "POST",
+      body: JSON.stringify({ jobTitle }),
+    });
+  },
+
+  sendMessage(chatId: string, message: string): Promise<ContinueChatResponse> {
+    return request<ContinueChatResponse>(`/chat/${chatId}/new-message`, {
+      method: "POST",
+      body: JSON.stringify({ message }),
+    });
+  },
+};
+
 // ── Auth API ──
 
 export const authApi = {
