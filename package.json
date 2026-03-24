@@ -7,7 +7,7 @@
     "dev:api": "pnpm --filter api run start",
     "dev:ui": "pnpm --filter ui run dev",
     "dev": "pnpm --parallel --filter api --filter ui run dev",
-    "start": "pnpm -w -r --parallel --filter api --filter ui run start",
+    "start": "pnpm --parallel --filter api --filter ui run start",
     "build": "pnpm -r --filter api --filter ui run build"
   },
   "keywords": [],
