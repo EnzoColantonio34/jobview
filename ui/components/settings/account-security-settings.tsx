@@ -1,51 +1,91 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
-import { Camera, Mail, Lock, Trash2 } from "lucide-react"
+import { Mail, Lock, Trash2, Loader2 } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
+import { useAuth } from "@/providers/auth-provider"
+import { useUpdateMe, useDeleteMe } from "@/hooks/mutations"
 
 export function AccountSecuritySettings() {
   const { t } = useTranslation()
-  const [email, setEmail] = useState("enzo.colantonio@example.com")
+  const { user } = useAuth()
+  const updateMe = useUpdateMe()
+  const deleteMe = useDeleteMe()
+  const [email, setEmail] = useState(user?.email ?? "")
   const [isEditingEmail, setIsEditingEmail] = useState(false)
+  const [isEditingPassword, setIsEditingPassword] = useState(false)
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+
+  useEffect(() => {
+    if (!isEditingEmail) {
+      setEmail(user?.email ?? "")
+    }
+  }, [user?.email, isEditingEmail])
+
+  function handleSaveEmail() {
+    if (!email || email === user?.email) {
+      setIsEditingEmail(false)
+      return
+    }
+
+    updateMe.mutate(
+      { email },
+      {
+        onSuccess: () => {
+          toast.success(t("settings.account.emailUpdateSuccess"))
+          setIsEditingEmail(false)
+        },
+      }
+    )
+  }
+
+  function handleCancelEmail() {
+    setEmail(user?.email ?? "")
+    setIsEditingEmail(false)
+  }
+
+  function handleSavePassword() {
+    if (newPassword !== confirmPassword) {
+      toast.error(t("settings.account.passwordMismatch"))
+      return
+    }
+
+    updateMe.mutate(
+      { password: newPassword },
+      {
+        onSuccess: () => {
+          toast.success(t("settings.account.passwordUpdateSuccess"))
+          setNewPassword("")
+          setConfirmPassword("")
+          setIsEditingPassword(false)
+        },
+      }
+    )
+  }
+
+  function handleCancelPassword() {
+    setNewPassword("")
+    setConfirmPassword("")
+    setIsEditingPassword(false)
+  }
+
+  function handleDeleteAccount() {
+    if (deleteMe.isPending) {
+      return
+    }
+
+    deleteMe.mutate()
+  }
 
   return (
     <div className="space-y-6">
-      {/* Avatar / Profile picture */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Camera className="h-5 w-5 text-primary" />
-            {t("settings.account.profilePictureTitle")}
-          </CardTitle>
-          <CardDescription>
-            {t("settings.account.profilePictureDescription")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-6">
-            <Avatar className="h-24 w-24">
-              <AvatarImage src="" />
-              <AvatarFallback className="text-2xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
-                EC
-              </AvatarFallback>
-            </Avatar>
-            <div className="space-y-2">
-              <Button variant="outline">{t("settings.account.changeAvatar")}</Button>
-              <p className="text-xs text-muted-foreground">
-                {t("settings.account.avatarInfo")}
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Email */}
       <Card>
         <CardHeader>
@@ -68,13 +108,15 @@ export function AccountSecuritySettings() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="mt-2"
+                  disabled={updateMe.isPending}
                 />
               </div>
               <div className="flex gap-2">
-                <Button onClick={() => setIsEditingEmail(false)}>
-                  {t("settings.account.save")}
+                <Button onClick={handleSaveEmail} disabled={updateMe.isPending}>
+                  {updateMe.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {updateMe.isPending ? t("settings.account.saving") : t("settings.account.save")}
                 </Button>
-                <Button variant="outline" onClick={() => setIsEditingEmail(false)}>
+                <Button variant="outline" onClick={handleCancelEmail} disabled={updateMe.isPending}>
                   {t("settings.account.cancel")}
                 </Button>
               </div>
@@ -82,7 +124,7 @@ export function AccountSecuritySettings() {
           ) : (
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">{email}</p>
+                <p className="text-sm font-medium">{user?.email ?? "—"}</p>
                 <p className="text-xs text-muted-foreground">{t("settings.account.currentEmailInfo")}</p>
               </div>
               <Button variant="outline" onClick={() => setIsEditingEmail(true)}>
@@ -105,7 +147,45 @@ export function AccountSecuritySettings() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="outline">{t("settings.account.changePassword")}</Button>
+          {isEditingPassword ? (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="new-password">{t("settings.account.newPasswordLabel")}</Label>
+                <Input
+                  id="new-password"
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="mt-2"
+                  disabled={updateMe.isPending}
+                />
+              </div>
+              <div>
+                <Label htmlFor="confirm-password">{t("settings.account.confirmPasswordLabel")}</Label>
+                <Input
+                  id="confirm-password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="mt-2"
+                  disabled={updateMe.isPending}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button onClick={handleSavePassword} disabled={updateMe.isPending || !newPassword}>
+                  {updateMe.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {updateMe.isPending ? t("settings.account.saving") : t("settings.account.save")}
+                </Button>
+                <Button variant="outline" onClick={handleCancelPassword} disabled={updateMe.isPending}>
+                  {t("settings.account.cancel")}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Button variant="outline" onClick={() => setIsEditingPassword(true)}>
+              {t("settings.account.changePassword")}
+            </Button>
+          )}
         </CardContent>
       </Card>
 
@@ -123,8 +203,9 @@ export function AccountSecuritySettings() {
         <CardContent>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                {t("settings.account.deleteAccount")}
+              <Button variant="destructive" disabled={deleteMe.isPending}>
+                {deleteMe.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {deleteMe.isPending ? t("settings.account.deleting") : t("settings.account.deleteAccount")}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -135,8 +216,12 @@ export function AccountSecuritySettings() {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>{t("settings.account.cancel")}</AlertDialogCancel>
-                <AlertDialogAction className="bg-destructive hover:bg-destructive/90">
+                <AlertDialogCancel disabled={deleteMe.isPending}>{t("settings.account.cancel")}</AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-destructive hover:bg-destructive/90"
+                  disabled={deleteMe.isPending}
+                  onClick={handleDeleteAccount}
+                >
                   {t("settings.account.confirmDelete")}
                 </AlertDialogAction>
               </AlertDialogFooter>

@@ -51,8 +51,20 @@ export interface CheckAvailabilityPayload {
   username?: string;
 }
 
-// ── SHA-256 password hashing ──
-// Le mot de passe est hashé côté client avant envoi pour ne jamais transiter en clair.
+export interface UpdateUserPayload {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  email?: string;
+  password?: string;
+  birthDate?: string;
+  phoneNumber?: string;
+}
+
+export interface CheckUserAvailabilityPayload {
+  email?: string;
+  username?: string;
+}
 
 async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -104,6 +116,10 @@ export function clearAuthData(): void {
 export function storeUser(user: UserResponse): void {
   if (typeof window === "undefined") return;
   localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
+export function updateStoredUser(user: UserResponse): void {
+  storeUser(user);
 }
 
 export function storeAccessToken(token: string): void {
@@ -272,6 +288,43 @@ export const authApi = {
     if (params.username) qs.set("username", params.username);
     return request<{ available: boolean }>(
       `/auth/check-availability?${qs.toString()}`,
+      { method: "GET" }
+    );
+  },
+};
+
+export const usersApi = {
+  getMe(): Promise<UserResponse> {
+    return request<UserResponse>("/users/me", { method: "GET" });
+  },
+
+  async updateMe(payload: UpdateUserPayload): Promise<UserResponse> {
+    const body = { ...payload };
+
+    if (body.password) {
+      body.password = await hashPassword(body.password);
+    }
+
+    return request<UserResponse>("/users/me", {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    });
+  },
+
+  deleteMe(): Promise<{ message: string }> {
+    return request<{ message: string }>("/users/me", {
+      method: "DELETE",
+    });
+  },
+
+  checkAvailability(
+    params: CheckUserAvailabilityPayload
+  ): Promise<{ available: boolean }> {
+    const qs = new URLSearchParams();
+    if (params.email) qs.set("email", params.email);
+    if (params.username) qs.set("username", params.username);
+    return request<{ available: boolean }>(
+      `/users/check-availability?${qs.toString()}`,
       { method: "GET" }
     );
   },

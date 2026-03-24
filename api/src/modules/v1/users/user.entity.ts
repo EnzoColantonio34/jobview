@@ -1,6 +1,5 @@
 import {
   Entity,
-    PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
     OneToMany,
@@ -22,7 +21,8 @@ export class User {
     // })
     // id: string;
 
-    @PrimaryColumn('uuid')
+    // Keep DB compatibility with existing SQLite schema column `user_id`.
+    @PrimaryColumn('uuid', { name: 'user_id' })
     id: string
 
     @BeforeInsert()

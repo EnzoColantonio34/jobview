@@ -12,6 +12,7 @@ import {
   authApi,
   userContextsApi,
   storeAuthData,
+  updateStoredUser,
   storeUser,
   clearAuthData,
   getStoredAccessToken,
@@ -29,6 +30,7 @@ interface AuthContextType {
   login: (payload: LoginPayload) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => Promise<void>;
+  setUser: (user: UserResponse) => void;
   markContextCompleted: () => void;
 }
 
@@ -38,7 +40,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Hydrate from localStorage on mount
   useEffect(() => {
     const token = getStoredAccessToken();
     const storedUser = getStoredUser();
@@ -111,6 +112,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const handleSetUser = useCallback((updatedUser: UserResponse) => {
+    updateStoredUser(updatedUser);
+    setUser(updatedUser);
+  }, []);
+
   const markContextCompleted = useCallback(() => {
     setUser((currentUser) => {
       if (!currentUser) {
@@ -134,9 +140,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       login,
       register,
       logout,
+      setUser: handleSetUser,
       markContextCompleted,
     }),
-    [user, isLoading, login, register, logout, markContextCompleted]
+    [
+      user,
+      isLoading,
+      login,
+      register,
+      logout,
+      handleSetUser,
+      markContextCompleted,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,13 +16,14 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useAuth } from "@/providers/auth-provider";
+import { useRegister } from "@/hooks/mutations";
+import { useAuthAvailability } from "@/hooks/queries";
 import {
   registerSchema,
   type RegisterFormValues,
   getPasswordStrength,
 } from "@/lib/auth-schemas";
-import { authApi, ApiError } from "@/lib/api-client";
+import { ApiError } from "@/lib/api-client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,18 +48,11 @@ function useDebounce<T>(value: T, delay: number): T {
 
 export function RegisterForm() {
   const { t } = useTranslation();
+  const registerMutation = useRegister();
   const router = useRouter();
-  const { register: registerUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showOptional, setShowOptional] = useState(false);
-
-  // Availability state
-  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
-  const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
-  const [checkingUsername, setCheckingUsername] = useState(false);
-  const [checkingEmail, setCheckingEmail] = useState(false);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -74,82 +68,6 @@ export function RegisterForm() {
     mode: "onChange",
   });
 
-  const watchUsername = form.watch("username");
-  const watchEmail = form.watch("email");
-  const watchPassword = form.watch("password");
-
-  const debouncedUsername = useDebounce(watchUsername, 500);
-  const debouncedEmail = useDebounce(watchEmail, 500);
-
-  const passwordStrength = getPasswordStrength(watchPassword || "");
-
-  // Check username availability
-  useEffect(() => {
-    if (!debouncedUsername || debouncedUsername.length < 3) {
-      setUsernameAvailable(null);
-      return;
-    }
-    let cancelled = false;
-    setCheckingUsername(true);
-    authApi
-      .checkAvailability({ username: debouncedUsername })
-      .then((res) => {
-        if (!cancelled) setUsernameAvailable(res.available);
-      })
-      .catch(() => {
-        if (!cancelled) setUsernameAvailable(null);
-      })
-      .finally(() => {
-        if (!cancelled) setCheckingUsername(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [debouncedUsername]);
-
-  // Check email availability
-  useEffect(() => {
-    if (!debouncedEmail || !debouncedEmail.includes("@")) {
-      setEmailAvailable(null);
-      return;
-    }
-    let cancelled = false;
-    setCheckingEmail(true);
-    authApi
-      .checkAvailability({ email: debouncedEmail })
-      .then((res) => {
-        if (!cancelled) setEmailAvailable(res.available);
-      })
-      .catch(() => {
-        if (!cancelled) setEmailAvailable(null);
-      })
-      .finally(() => {
-        if (!cancelled) setCheckingEmail(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [debouncedEmail]);
-
-  const onSubmit = async (values: RegisterFormValues) => {
-    setIsSubmitting(true);
-    try {
-      const { confirmPassword, ...payload } = values;
-      // Clean optional empty fields
-      const cleanPayload = Object.fromEntries(
-        Object.entries(payload).filter(([, v]) => v !== "" && v !== undefined)
-      );
-      await registerUser(cleanPayload as typeof payload);
-      router.push("/onboarding");
-    } catch (err) {
-      const message =
-        err instanceof ApiError ? err.message : t("auth.errors.generic");
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const strengthColors = [
     "bg-destructive",
     "bg-destructive",
@@ -157,6 +75,42 @@ export function RegisterForm() {
     "bg-primary",
     "bg-green-500",
   ];
+
+  const watchUsername = form.watch("username");
+  const watchEmail = form.watch("email");
+  const watchPassword = form.watch("password");
+  const debouncedUsername = useDebounce(watchUsername, 500);
+  const debouncedEmail = useDebounce(watchEmail, 500);
+  const passwordStrength = getPasswordStrength(watchPassword || "");
+
+  const usernameQuery = useAuthAvailability(
+    { username: debouncedUsername },
+    !!debouncedUsername && debouncedUsername.length >= 3
+  );
+
+  const emailQuery = useAuthAvailability(
+    { email: debouncedEmail },
+    !!debouncedEmail && debouncedEmail.includes("@")
+  );
+
+  const usernameAvailable = usernameQuery.data?.available ?? null;
+  const emailAvailable = emailQuery.data?.available ?? null;
+  const checkingUsername = usernameQuery.isFetching;
+  const checkingEmail = emailQuery.isFetching;
+  const onSubmit = async (values: RegisterFormValues) => {
+    const { confirmPassword, ...payload } = values;
+    const cleanPayload = Object.fromEntries(
+      Object.entries(payload).filter(([, v]) => v !== "" && v !== undefined)
+    );
+    try {
+      await registerMutation.mutateAsync(cleanPayload as typeof payload);
+      router.push("/onboarding");
+    } catch (err) {
+      const message =
+        err instanceof ApiError ? err.message : t("auth.errors.generic");
+      toast.error(message);
+    }
+  };
 
   const AvailabilityIndicator = ({
     available,
@@ -437,9 +391,9 @@ export function RegisterForm() {
         <Button
           type="submit"
           className="w-full bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:opacity-90 transition-opacity"
-          disabled={isSubmitting}
+          disabled={registerMutation.isPending}
         >
-          {isSubmitting ? (
+          {registerMutation.isPending ? (
             <Spinner className="mr-2" />
           ) : (
             <UserPlus className="mr-2 h-4 w-4" />
