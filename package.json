@@ -9,7 +9,9 @@
     "dev:local": "pnpm run docker:up && pnpm -r --parallel --filter api --filter ui run dev",
     "dev": "pnpm run docker:up",
     "start": "pnpm run docker:up",
-    "build": "pnpm -r --filter api --filter ui run build"
+    "build": "pnpm -r --filter api --filter ui run build",
+    "docker:up": "docker compose -f api/docker-compose.yml -f ui/docker-compose.yml up -d",
+    "docker:down": "docker compose -f api/docker-compose.yml -f ui/docker-compose.yml down"
   },
   "keywords": [],
   "author": "",
