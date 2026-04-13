@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: jobview-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: jobview-user
+      POSTGRES_PASSWORD: jobview-password
+      POSTGRES_DB: jobview-database
+    volumes:
+      - jobview-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jobview-user -d jobview-database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  jobview-postgres-data:

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Extract base URL without /api/v1 suffix
 const getBackendBase = () => {
   const backendUrl = process.env.API_BACKEND_URL;
   if (!backendUrl) throw new Error("Missing env variable: API_BACKEND_URL");

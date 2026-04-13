@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -17,19 +19,21 @@ import { MessagesModule } from './modules/v1/messages/messages.module';
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
-        
+
+        ThrottlerModule.forRoot([{ ttl: 60_000, limit: 20 }]),
+
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => ({
                 type: 'postgres',
-                host: configService.get<string>('DB_HOST', 'localhost'),
-                port: configService.get<number>('DB_PORT', 5433),
+                host: configService.get<string>('DB_HOST'),
+                port: parseInt(configService.get<string>('DB_PORT') ?? '5432', 10),
                 username: configService.get<string>('DB_USER'),
                 password: configService.get<string>('DB_PASSWORD'),
                 database: configService.get<string>('DB_NAME'),
                 autoLoadEntities: true,
-                synchronize: true,
+                synchronize: configService.get<string>('DB_SYNCHRONIZE') !== 'false',
 
                 // Naming strategy, transforms myColumn in entity to my_column in database
                 namingStrategy: new SnakeNamingStrategy(),
@@ -46,6 +50,9 @@ import { MessagesModule } from './modules/v1/messages/messages.module';
         MessagesModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        { provide: APP_GUARD, useClass: ThrottlerGuard },
+    ],
 })
 export class AppModule {}

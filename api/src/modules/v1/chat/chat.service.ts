@@ -40,23 +40,40 @@ export class ChatService {
         }
     }
 
+    private sanitizeForPrompt(value: string | number | undefined | null, maxLen: number): string {
+        if (value === undefined || value === null) return '';
+        return String(value)
+            .replace(/[<>]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .slice(0, maxLen);
+    }
+
     private renderCandidateContextBlock(ctx: UserContextResponseDto | null): string {
         if (!ctx) return '- Aucun contexte candidat renseigné.';
         const lines: string[] = [];
-        if (ctx.industry) lines.push(`- Secteur visé : ${ctx.industry}`);
-        if (ctx.degree) lines.push(`- Diplôme : ${ctx.degree}`);
-        if (ctx.experienceYears) lines.push(`- Années d'expérience : ${ctx.experienceYears}`);
-        if (ctx.careerSummary) lines.push(`- Résumé de carrière : ${ctx.careerSummary}`);
-        if (ctx.location) lines.push(`- Localisation : ${ctx.location}`);
-        if (ctx.mobilityType) lines.push(`- Mobilité : ${ctx.mobilityType}`);
-        if (ctx.specialSituationNote) lines.push(`- Situation particulière : ${ctx.specialSituationNote}`);
+        const industry = this.sanitizeForPrompt(ctx.industry, 120);
+        const degree = this.sanitizeForPrompt(ctx.degree, 120);
+        const careerSummary = this.sanitizeForPrompt(ctx.careerSummary, 500);
+        const location = this.sanitizeForPrompt(ctx.location, 120);
+        const mobilityType = this.sanitizeForPrompt(ctx.mobilityType, 120);
+        const specialSituationNote = this.sanitizeForPrompt(ctx.specialSituationNote, 500);
+        if (industry) lines.push(`- Secteur visé : ${industry}`);
+        if (degree) lines.push(`- Diplôme : ${degree}`);
+        if (ctx.experienceYears) lines.push(`- Années d'expérience : ${this.sanitizeForPrompt(ctx.experienceYears, 10)}`);
+        if (careerSummary) lines.push(`- Résumé de carrière : ${careerSummary}`);
+        if (location) lines.push(`- Localisation : ${location}`);
+        if (mobilityType) lines.push(`- Mobilité : ${mobilityType}`);
+        if (specialSituationNote) lines.push(`- Situation particulière : ${specialSituationNote}`);
         return lines.length > 0 ? lines.join('\n            ') : '- Aucun contexte candidat renseigné.';
     }
 
     async startChat(user: User, jobTitle: string) {
+        const safeJobTitle = this.sanitizeForPrompt(jobTitle, 120);
+
         const chat = this.chatRepository.create({
             user,
-            jobTitle,
+            jobTitle: safeJobTitle,
             status: 'ongoing',
         });
 
@@ -67,7 +84,7 @@ export class ChatService {
 
         const systemInstruction = new SystemMessage(`
             <identity>
-            Tu es un recruteur expert. Tu mènes un entretien d'embauche pour le poste de "${jobTitle}".
+            Tu es un recruteur expert. Tu mènes un entretien d'embauche pour le poste de "${safeJobTitle}".
             </identity>
             <context_candidat>
             Voici le profil du candidat que tu interviewes :
@@ -98,13 +115,13 @@ export class ChatService {
         };
     }
 
-    // Trouver une conversation avec ses messages
-    async findOne(id: string): Promise<Chat> {
+    // Trouver une conversation avec ses messages (scopée à l'utilisateur)
+    async findOne(id: string, userId: string): Promise<Chat> {
         const chat = await this.chatRepository.findOne({
-            where: { id },
-            relations: ['messages'], // Charge les messages liés
+            where: { id, user: { id: userId } },
+            relations: ['messages'],
         });
-        
+
         if (!chat) throw new NotFoundException("Chat introuvable");
         return chat;
     }
@@ -114,14 +131,12 @@ export class ChatService {
         return this.chatRepository.update(id, { status: 'completed' });
     }
 
-    // ajouter historique de messages
-    // limiter le nombre d'échanges
-    // mieux cadrer les échanges afin de réduire au maximum le risque de dérives de l'utilisateur (double appel)
-    // cadrer les derniers échanges (2 derniers messages : des questions ? et merci pour cet entretien)
-    // ajouter l'analyse de l'entretien à la fin 
-    // sortir de la simulation et échanger avec l'ia afin d'avoir des retours sur tout l'entretien en plus de l'analyse finale ?
     async generateResponse(user: User, userMessage: string, chatId: string) {
-        const chat = await this.findOne(chatId);
+        const chat = await this.findOne(chatId, user.id);
+
+        if (chat.status == 'completed') {
+            throw new BadRequestException("L'entretien est terminé.");
+        }
 
         const history = await this.messagesService.findByConversation(chatId);
 
@@ -130,29 +145,18 @@ export class ChatService {
             return new AIMessage(msg.content);
         });
 
-        const count = history.length;
+        // Compte le tour utilisateur courant (non encore persisté).
+        const count = history.length + 1;
 
-        if (chat.status == 'completed') {
-            throw new BadRequestException("L'entretien est terminé.");
-        }
-
-        let phaseInstruction = "";
-
+        let phaseInstruction: string;
         if (count >= 18) {
-            phaseInstruction = `
-                DERNIÈRE RÉPONSE : Remercie le candidat pour son temps, 
-                indique que l'entretien est terminé et que le RH reviendra vers lui. 
-                Ne pose plus aucune question. DIS AU REVOIR.`;
+            phaseInstruction = `DERNIÈRE RÉPONSE : Remercie le candidat pour son temps, indique que l'entretien est terminé et que le RH reviendra vers lui. Ne pose plus aucune question. DIS AU REVOIR.`;
         } else if (count >= 14) {
-            phaseInstruction = `
-                PHASE DE CLÔTURE : On approche de la fin. 
-                Pose une question sur les disponibilités, les attentes ou demande 
-                si le candidat a des questions. Prépare la sortie.`;
+            phaseInstruction = `PHASE DE CLÔTURE : On approche de la fin. Pose une question sur les disponibilités, les attentes ou demande si le candidat a des questions. Prépare la sortie.`;
         } else {
-            phaseInstruction = `
-                PHASE D'EXPLORATION : Continue d'interroger le candidat sur ses compétences techniques et son expérience.`;
+            phaseInstruction = `PHASE D'EXPLORATION : Continue d'interroger le candidat sur ses compétences techniques et son expérience.`;
         }
-        
+
         const userContext = await this.loadUserContext(user.id);
         const contextBlock = this.renderCandidateContextBlock(userContext);
 
@@ -162,13 +166,14 @@ export class ChatService {
             throw new NotFoundException();
         }
 
-        const degreesLine = fullUser.degrees?.map(d => d.label).join(', ') || 'Aucun';
-        const experiencesLine = fullUser.experiences?.map(e => e.label).join(', ') || 'Aucune';
+        const degreesLine = fullUser.degrees?.map(d => this.sanitizeForPrompt(d.label, 120)).filter(Boolean).join(', ') || 'Aucun';
+        const experiencesLine = fullUser.experiences?.map(e => this.sanitizeForPrompt(e.label, 120)).filter(Boolean).join(', ') || 'Aucune';
+        const safeJobTitle = this.sanitizeForPrompt(chat.jobTitle, 120);
 
         // Construction du "System Prompt" (Les consignes de l'IA)
         const systemInstruction = new SystemMessage(`
             <identity>
-            Tu es un recruteur expert. Tu mènes un entretien d'embauche pour le poste de "${chat.jobTitle}". C'est toi qui mène l'entretien d'embauche, tu cherches
+            Tu es un recruteur expert. Tu mènes un entretien d'embauche pour le poste de "${safeJobTitle}". C'est toi qui mène l'entretien d'embauche, tu cherches
             à identifier les compétences du candidat, s'il sera apte pour ce poste.
             </identity>
             <context_candidat>
@@ -192,17 +197,19 @@ export class ChatService {
             </rules>
         `);
 
+        const phaseMessage = new SystemMessage(`<phase>${phaseInstruction}</phase>`);
 
         const currentUserMessage = new HumanMessage(userMessage);
 
         const response = await this.model.invoke([
             systemInstruction,
+            phaseMessage,
             ...chatHistory,
             currentUserMessage,
         ]);
 
-        await this.messagesService.create(chatId, 'human', userMessage)
-        await this.messagesService.create(chatId, 'ai', response.content as string)
+        await this.messagesService.create(chatId, 'human', userMessage);
+        await this.messagesService.create(chatId, 'ai', response.content as string);
 
         return {
             text: response.content,

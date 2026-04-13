@@ -1,4 +1,6 @@
-import { Controller, Post, Body, UseGuards, Param } from '@nestjs/common';
+import { Body, Controller, Param, ParseUUIDPipe, Post, UseGuards } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
+import { StartChatDto, SendMessageDto } from '@jobview/shared';
 import { ChatService } from './chat.service';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { GetUser } from '../decorators/get-user.decorator';
@@ -9,26 +11,23 @@ export class ChatController {
     constructor(private readonly chatService: ChatService) {}
 
     @UseGuards(JwtAuthGuard)
+    @Throttle({ default: { ttl: 60_000, limit: 10 } })
     @Post('')
     async startChat(
         @GetUser() user: User,
-        @Body() body: {jobTitle: string}
+        @Body() body: StartChatDto,
     ) {
-        const result = await this.chatService.startChat(user, body.jobTitle);
-        return result;
+        return this.chatService.startChat(user, body.jobTitle);
     }
 
     @UseGuards(JwtAuthGuard)
+    @Throttle({ default: { ttl: 60_000, limit: 10 } })
     @Post(':id/new-message')
     async continueChat(
-        @Param('id') chatId: string,
+        @Param('id', ParseUUIDPipe) chatId: string,
         @GetUser() user: User,
-        @Body() body: { message: string }
+        @Body() body: SendMessageDto,
     ) {
-        return this.chatService.generateResponse(
-            user,
-            body.message,
-            chatId,
-        );
+        return this.chatService.generateResponse(user, body.message, chatId);
     }
 }
