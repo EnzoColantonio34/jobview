@@ -20,10 +20,14 @@ import { UserContextsModule } from './modules/v1/user-contexts/user-contexts.mod
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => ({
-                type: 'sqlite',
-                database: configService.get<string>('DATABASE_NAME'), 
+                type: 'postgres',
+                host: configService.get<string>('DB_HOST'),
+                port: parseInt(configService.get<string>('DB_PORT') ?? '5432', 10),
+                username: configService.get<string>('DB_USER'),
+                password: configService.get<string>('DB_PASSWORD'),
+                database: configService.get<string>('DB_NAME'),
                 autoLoadEntities: true,
-                synchronize: true,
+                synchronize: configService.get<string>('DB_SYNCHRONIZE') !== 'false',
 
                 // Naming strategy, transforms myColumn in entity to my_column in database
                 namingStrategy: new SnakeNamingStrategy(),

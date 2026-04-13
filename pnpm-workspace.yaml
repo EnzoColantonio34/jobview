@@ -7,6 +7,7 @@ ignoredBuiltDependencies:
   - '@nestjs/core'
   - '@parcel/watcher'
   - esbuild
+  - sharp
   - unrs-resolver
 
 onlyBuiltDependencies:
