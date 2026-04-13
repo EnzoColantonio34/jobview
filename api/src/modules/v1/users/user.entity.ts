@@ -10,6 +10,9 @@ import {
 import { Company } from '../companies/company.entity';
 import { v7 as uuidv7 } from 'uuid';
 import { UserContext } from '../user-contexts/entities/user-context.entity';
+import { Degree } from '../degrees/entities/degree.entity';
+import { Experience } from '../experiences/entities/experience.entity';
+import { Chat } from '../chat/chat.entity';
 
 @Entity('users')
 export class User {
@@ -63,6 +66,15 @@ export class User {
     @OneToMany(() => Company, (company) => company.user)
     companies: Company[];
 
+    @OneToMany(() => Degree, (degree) => degree.user)
+    degrees: Degree[];
+    
+    @OneToMany(() => Experience, (experience) => experience.user)
+    experiences: Experience[];
+
     @OneToOne(() => UserContext, (context) => context.user)
     context: UserContext;
+
+    @OneToMany(() => Chat, (chat) => chat.user)
+    chat: Chat[];
 }

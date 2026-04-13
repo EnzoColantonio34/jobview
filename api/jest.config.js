@@ -8,4 +8,7 @@ module.exports = {
     transform: {
         ...tsJestTransformCfg,
     },
+    moduleNameMapper: {
+        "^uuid$": "<rootDir>/test/mocks/uuid.ts",
+    },
 };

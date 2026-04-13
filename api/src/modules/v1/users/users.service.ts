@@ -171,7 +171,7 @@ export class UsersService {
     async setCurrentHashedRefreshToken(uuid: string, hashedToken: string | null): Promise<void> {
         if (hashedToken == null) {
             await this.userRepository.update(
-                { id: uuid, currentHashedRefreshToken: Not(IsNull()) }, // Condition : seulement si non null
+                { id: uuid, currentHashedRefreshToken: Not(IsNull()) },
                 { currentHashedRefreshToken: hashedToken }
             );
         } else {
@@ -191,6 +191,13 @@ export class UsersService {
         await this.userRepository.remove(user);
 
         return true;
+    }
+
+    async findOneWithDetails(id: string) {
+        return this.userRepository.findOne({
+            where: { id },
+            relations: ['degrees', 'experiences'],
+        });
     }
 
 }

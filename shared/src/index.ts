@@ -24,4 +24,7 @@ export * from './dtos/experiences/update-experience.dto';
 export * from './dtos/user-contexts/create-user-context.dto';
 export * from './dtos/user-contexts/update-user-context.dto';
 export * from './dtos/user-contexts/response-user-context.dto';
+
+export * from './dtos/chat/start-chat.dto';
+export * from './dtos/chat/send-message.dto';
 // export * from './enums/role.enum';

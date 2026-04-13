@@ -1,90 +1,101 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
 import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { THEME_TEMPLATES } from "@/config/theme-templates"
 import { CompanySearchBar } from "@/components/directory/company-search-bar"
 import { CompanyCard } from "@/components/directory/company-card"
 import { CompanySummary } from "@/components/directory/company-summary"
+import { AddCompanyDialog } from "@/components/directory/add-company-dialog"
 import { useTranslation } from "react-i18next"
-import { type Company, filterCompaniesByName } from "@/lib/company-utils"
+import { filterCompanies } from "@/lib/company-utils"
+import { ApiError, companiesApi } from "@/lib/api-client"
 
 export function CompanyDirectory() {
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
   const [searchTerm, setSearchTerm] = useState("")
-  const [companies, setCompanies] = useState<Company[]>([
-    {
-      id: "1",
-      name: "Tech Corp",
-      website: "techcorp.com",
-      position: "Senior Developer",
-      contactDate: "2025-01-10",
-      status: "interview",
-    },
-    {
-      id: "2",
-      name: "StartUp Inc",
-      website: "startupinc.io",
-      position: "Full Stack Developer",
-      contactDate: "2025-01-05",
-      status: "contacted",
-    },
-    {
-      id: "3",
-      name: "Digital Solutions",
-      website: "digitalsolutions.com",
-      position: "React Developer",
-      contactDate: "2024-12-28",
-      status: "rejected",
-    },
-    {
-      id: "4",
-      name: "Cloud Systems",
-      website: "cloudsystems.io",
-      position: "DevOps Engineer",
-      contactDate: "2025-01-15",
-      status: "offer",
-    },
-  ])
+  const [addOpen, setAddOpen] = useState(false)
 
-  const filteredCompanies = filterCompaniesByName(companies, searchTerm)
+  const companiesQuery = useQuery({
+    queryKey: ["companies"],
+    queryFn: companiesApi.list,
+  })
 
-  const handleDeleteCompany = (id: string) => {
-    setCompanies(companies.filter((c) => c.id !== id))
-  }
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => companiesApi.remove(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["companies"] })
+      queryClient.invalidateQueries({ queryKey: ["interviews"] })
+      toast.success(t("company.deleteSuccess", "Entreprise supprimée"))
+    },
+    onError: (err) => {
+      toast.error(err instanceof ApiError ? err.message : t("common.genericError", "Erreur"))
+    },
+  })
 
-  const handleAddCompany = () => {
-    // TODO: Implement add company functionality
-    console.log("Add company")
-  }
+  const companies = companiesQuery.data ?? []
+  const filteredCompanies = useMemo(
+    () => filterCompanies(companies, searchTerm),
+    [companies, searchTerm],
+  )
 
-  const handleMessageCompany = (id: string) => {
-    // TODO: Implement message company functionality
-    console.log("Message company:", id)
+  const handleDeleteCompany = (id: number) => {
+    if (typeof window !== "undefined" && !window.confirm(t("company.confirmDelete", "Supprimer cette entreprise ?"))) {
+      return
+    }
+    deleteMutation.mutate(id)
   }
 
   return (
     <div className={`space-y-6 ${THEME_TEMPLATES.animation.fadeIn}`}>
-      <CompanySearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} onAdd={handleAddCompany} />
+      <CompanySearchBar
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        onAdd={() => setAddOpen(true)}
+      />
 
-      <div className="space-y-3">
-        {filteredCompanies.length === 0 ? (
-          <Card className={`${THEME_TEMPLATES.card.base} p-8 text-center`}>
-            <p className={THEME_TEMPLATES.text.muted}>{t("company.noCompaniesFound")}</p>
-          </Card>
-        ) : (
-          filteredCompanies.map((company) => (
-            <CompanyCard
-              key={company.id}
-              company={company}
-              onDelete={handleDeleteCompany}
-              onMessage={handleMessageCompany}
-            />
-          ))
-        )}
-      </div>
+      {companiesQuery.isLoading ? (
+        <Card className={`${THEME_TEMPLATES.card.base} p-8 text-center`}>
+          <p className={THEME_TEMPLATES.text.muted}>{t("common.loading", "Chargement…")}</p>
+        </Card>
+      ) : companiesQuery.isError ? (
+        <Card className={`${THEME_TEMPLATES.card.base} p-8 text-center space-y-3`}>
+          <p className="text-destructive">
+            {companiesQuery.error instanceof ApiError
+              ? companiesQuery.error.message
+              : t("common.genericError", "Erreur de chargement")}
+          </p>
+          <Button size="sm" variant="outline" onClick={() => companiesQuery.refetch()}>
+            {t("common.retry", "Réessayer")}
+          </Button>
+        </Card>
+      ) : (
+        <>
+          <div className="space-y-3">
+            {filteredCompanies.length === 0 ? (
+              <Card className={`${THEME_TEMPLATES.card.base} p-8 text-center`}>
+                <p className={THEME_TEMPLATES.text.muted}>{t("company.noCompaniesFound")}</p>
+              </Card>
+            ) : (
+              filteredCompanies.map((company) => (
+                <CompanyCard
+                  key={company.companyId}
+                  company={company}
+                  onDelete={handleDeleteCompany}
+                />
+              ))
+            )}
+          </div>
 
-      <CompanySummary companies={companies} />
+          <CompanySummary companies={companies} />
+        </>
+      )}
+
+      <AddCompanyDialog open={addOpen} onOpenChange={setAddOpen} />
     </div>
   )
 }

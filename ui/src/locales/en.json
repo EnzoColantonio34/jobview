@@ -96,9 +96,10 @@
   },
   "chat": {
     "welcomeTitle": "Ready for your interview?",
-    "welcomeDescription": "Explain the context of your interview and I will ask you questions to help you prepare.",
-    "firstInputPlaceholder": "Send your answer...",
-    "inputPlaceholder": "Your answer..."
+    "welcomeDescription": "Tell me which role you want to practice for and I will start the interview.",
+    "firstInputPlaceholder": "Which role do you want to practice for?",
+    "inputPlaceholder": "Your answer...",
+    "error": "Something went wrong. Please try again."
   },
   "calendar": {
     "daysOfWeek": {

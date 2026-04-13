@@ -3,18 +3,11 @@
 import { THEME_TEMPLATES } from "@/config/theme-templates"
 import { DAYS_OF_WEEK_KEYS, getDaysInMonth, getFirstDayOfMonth, formatDateString } from "@/lib/calendar-utils"
 import { useTranslation } from "react-i18next"
-
-export interface Interview {
-  id: string
-  date: string
-  time: string
-  company: string
-  position: string
-}
+import type { UIInterview } from "@/lib/interview-utils"
 
 interface CalendarGridProps {
   currentDate: Date
-  interviews: Interview[]
+  interviews: UIInterview[]
 }
 
 export function CalendarGrid({ currentDate, interviews }: CalendarGridProps) {

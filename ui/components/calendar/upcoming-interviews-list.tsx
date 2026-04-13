@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button"
 import { Trash2, Plus } from "lucide-react"
 import { THEME_TEMPLATES } from "@/config/theme-templates"
 import { useTranslation } from "react-i18next"
-import type { Interview } from "@/components/calendar/calendar-grid"
+import type { UIInterview } from "@/lib/interview-utils"
 
 interface UpcomingInterviewsListProps {
-  interviews: Interview[]
-  onDelete: (id: string) => void
+  interviews: UIInterview[]
+  onDelete: (id: number) => void
   onAdd: () => void
 }
 

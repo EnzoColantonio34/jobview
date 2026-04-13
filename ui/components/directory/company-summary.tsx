@@ -1,18 +1,20 @@
 import { Card } from "@/components/ui/card"
 import { THEME_TEMPLATES } from "@/config/theme-templates"
 import { useTranslation } from "react-i18next"
-import type { Company } from "@/lib/company-utils"
+import { deriveCompanyStatus } from "@/lib/company-utils"
+import type { CompanyResponse } from "@/lib/api-client"
 
 interface CompanySummaryProps {
-  companies: Company[]
+  companies: CompanyResponse[]
 }
 
 export function CompanySummary({ companies }: CompanySummaryProps) {
   const { t } = useTranslation()
   const totalCompanies = companies.length
-  const interviewCount = companies.filter((c) => c.status === "interview").length
-  const offerCount = companies.filter((c) => c.status === "offer").length
-  const rejectedCount = companies.filter((c) => c.status === "rejected").length
+  const statuses = companies.map(deriveCompanyStatus)
+  const interviewCount = statuses.filter((s) => s === "interview").length
+  const offerCount = statuses.filter((s) => s === "offer").length
+  const rejectedCount = statuses.filter((s) => s === "rejected").length
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-4">

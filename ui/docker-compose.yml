@@ -1,27 +1,34 @@
-version: "3.9"
 services:
-  # Development service: runs Vite dev server with host mounting for HMR
+  # Development service: runs Next.js dev server with host mounting for HMR
   ui-dev:
     image: node:20-alpine
-    working_dir: /app
+    working_dir: /workspace
     volumes:
-      - ./:/app:delegated
-      - /app/node_modules
+      - ../:/workspace:delegated
+      - /workspace/node_modules
     ports:
       - "5173:5173"
     environment:
       # Enable polling on some macOS setups; optional
       - CHOKIDAR_USEPOLLING=true
-    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install --prefer-frozen-lockfile && pnpm dev --host"
+      - API_BACKEND_URL=http://host.docker.internal:3001/api/v1
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: sh -c "COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack enable && COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack prepare pnpm@10.13.1 --activate && pnpm install --frozen-lockfile && pnpm --filter ui exec next dev -H 0.0.0.0 -p 5173"
     tty: true
 
-  # Production service: build then serve with nginx
+  # Production service: build then serve with Next standalone runtime.
+  # Opt-in via `docker compose --profile prod up` so it doesn't clash with ui-dev on port 5173.
   ui-prod:
+    profiles: ["prod"]
     build:
-      context: .
+      context: ..
+      dockerfile: ui/Dockerfile
       target: runner
     ports:
-      - "5173:80"
+      - "5173:3000"
+    environment:
+      - API_BACKEND_URL=${API_BACKEND_URL}
     restart: unless-stopped
 
 networks:

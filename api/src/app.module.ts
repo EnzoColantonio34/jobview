@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,11 +13,15 @@ import { InterviewsModule } from './modules/v1/interviews/interviews.module';
 import { DegreesModule } from './modules/v1/degrees/degrees.module';
 import { ExperiencesModule } from './modules/v1/experiences/experiences.module';
 import { UserContextsModule } from './modules/v1/user-contexts/user-contexts.module';
+import { ChatModule } from './modules/v1/chat/chat.module';
+import { MessagesModule } from './modules/v1/messages/messages.module';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
-        
+
+        ThrottlerModule.forRoot([{ ttl: 60_000, limit: 20 }]),
+
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
@@ -39,9 +45,14 @@ import { UserContextsModule } from './modules/v1/user-contexts/user-contexts.mod
         InterviewsModule,
         DegreesModule,
         ExperiencesModule,
-        UserContextsModule
+        UserContextsModule,
+        ChatModule,
+        MessagesModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        { provide: APP_GUARD, useClass: ThrottlerGuard },
+    ],
 })
 export class AppModule {}

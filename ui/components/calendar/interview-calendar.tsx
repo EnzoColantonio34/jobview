@@ -1,29 +1,47 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
+import { useTranslation } from "react-i18next"
 import { THEME_TEMPLATES } from "@/config/theme-templates"
 import { CalendarHeader } from "@/components/calendar/calendar-header"
-import { CalendarGrid, type Interview } from "@/components/calendar/calendar-grid"
+import { CalendarGrid } from "@/components/calendar/calendar-grid"
 import { UpcomingInterviewsList } from "@/components/calendar/upcoming-interviews-list"
+import { AddInterviewDialog } from "@/components/calendar/add-interview-dialog"
+import { Button } from "@/components/ui/button"
+import { ApiError, interviewsApi } from "@/lib/api-client"
+import { mapInterviewToUI, type UIInterview } from "@/lib/interview-utils"
 
 export function InterviewCalendar() {
-  const [currentDate, setCurrentDate] = useState(new Date(2025, 0))
-  const [interviews, setInterviews] = useState<Interview[]>([
-    {
-      id: "1",
-      date: "2025-01-15",
-      time: "10:00",
-      company: "Tech Corp",
-      position: "Senior Developer",
+  const { t } = useTranslation()
+  const queryClient = useQueryClient()
+
+  const [currentDate, setCurrentDate] = useState(() => new Date())
+  const [addOpen, setAddOpen] = useState(false)
+
+  const interviewsQuery = useQuery({
+    queryKey: ["interviews"],
+    queryFn: interviewsApi.list,
+  })
+
+  const uiInterviews = useMemo<UIInterview[]>(() => {
+    return (interviewsQuery.data ?? [])
+      .map(mapInterviewToUI)
+      .filter((i): i is UIInterview => i !== null)
+  }, [interviewsQuery.data])
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => interviewsApi.remove(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["interviews"] })
+      queryClient.invalidateQueries({ queryKey: ["companies"] })
+      toast.success(t("upcomingInterviews.deleteSuccess", "Entretien supprimé"))
     },
-    {
-      id: "2",
-      date: "2025-01-20",
-      time: "14:30",
-      company: "StartUp Inc",
-      position: "Full Stack Dev",
+    onError: (err) => {
+      toast.error(err instanceof ApiError ? err.message : t("common.genericError", "Erreur"))
     },
-  ])
+  })
 
   const handlePreviousMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))
@@ -33,13 +51,11 @@ export function InterviewCalendar() {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))
   }
 
-  const handleDeleteInterview = (id: string) => {
-    setInterviews(interviews.filter((i) => i.id !== id))
-  }
-
-  const handleAddInterview = () => {
-    // TODO: Implement add interview functionality
-    console.log("Add interview")
+  const handleDeleteInterview = (id: number) => {
+    if (typeof window !== "undefined" && !window.confirm(t("upcomingInterviews.confirmDelete", "Supprimer cet entretien ?"))) {
+      return
+    }
+    deleteMutation.mutate(id)
   }
 
   return (
@@ -50,13 +66,31 @@ export function InterviewCalendar() {
         onNextMonth={handleNextMonth}
       />
 
-      <CalendarGrid currentDate={currentDate} interviews={interviews} />
+      {interviewsQuery.isLoading ? (
+        <p className={THEME_TEMPLATES.text.muted}>{t("common.loading", "Chargement…")}</p>
+      ) : interviewsQuery.isError ? (
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-destructive">
+            {interviewsQuery.error instanceof ApiError
+              ? interviewsQuery.error.message
+              : t("common.genericError", "Erreur de chargement")}
+          </p>
+          <Button size="sm" variant="outline" onClick={() => interviewsQuery.refetch()}>
+            {t("common.retry", "Réessayer")}
+          </Button>
+        </div>
+      ) : (
+        <>
+          <CalendarGrid currentDate={currentDate} interviews={uiInterviews} />
+          <UpcomingInterviewsList
+            interviews={uiInterviews}
+            onDelete={handleDeleteInterview}
+            onAdd={() => setAddOpen(true)}
+          />
+        </>
+      )}
 
-      <UpcomingInterviewsList
-        interviews={interviews}
-        onDelete={handleDeleteInterview}
-        onAdd={handleAddInterview}
-      />
+      <AddInterviewDialog open={addOpen} onOpenChange={setAddOpen} />
     </div>
   )
 }

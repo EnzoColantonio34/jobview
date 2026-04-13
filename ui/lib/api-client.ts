@@ -242,6 +242,125 @@ export const userContextsApi = {
   }
 };
 
+// ── Companies & Interviews ──
+
+export interface CompanyResponse {
+  companyId: number;
+  name: string;
+  city: string | null;
+  zipCode: string | null;
+  address: string | null;
+  addressExtra: string | null;
+  email: string | null;
+  phoneNumber: string | null;
+  deletedAt: string | null;
+  createdAt: string;
+  interviews: InterviewResponse[];
+}
+
+export interface InterviewResponse {
+  id: number;
+  label: string;
+  state: string | null;
+  emailSentDate: string | null;
+  interviewDate: string | null;
+  remindDate: string | null;
+  company: CompanyResponse;
+}
+
+export interface CreateCompanyPayload {
+  name: string;
+  city?: string;
+  zipCode?: string;
+  address?: string;
+  addressExtra?: string;
+  email?: string;
+  phoneNumber?: string;
+}
+
+export type UpdateCompanyPayload = Partial<CreateCompanyPayload>;
+
+export interface CreateInterviewPayload {
+  label: string;
+  companyId: number;
+  state?: string;
+  emailSentDate?: string;
+  interviewDate?: string;
+  remindDate?: string;
+}
+
+export const companiesApi = {
+  list(): Promise<CompanyResponse[]> {
+    return request<CompanyResponse[]>("/companies", { method: "GET" });
+  },
+
+  create(payload: CreateCompanyPayload): Promise<CompanyResponse> {
+    return request<CompanyResponse>("/companies", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  update(id: number, payload: UpdateCompanyPayload): Promise<CompanyResponse> {
+    return request<CompanyResponse>(`/companies/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  remove(id: number): Promise<{ message: string }> {
+    return request<{ message: string }>(`/companies/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
+export const interviewsApi = {
+  list(): Promise<InterviewResponse[]> {
+    return request<InterviewResponse[]>("/interviews", { method: "GET" });
+  },
+
+  create(payload: CreateInterviewPayload): Promise<InterviewResponse> {
+    return request<InterviewResponse>("/interviews", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  remove(id: number): Promise<{ message: string }> {
+    return request<{ message: string }>(`/interviews/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
+// ── Chat (LLM) API ──
+
+export interface StartChatResponse {
+  chatId: string;
+  firstMessage: string;
+}
+
+export interface ContinueChatResponse {
+  text: string;
+}
+
+export const chatApi = {
+  start(jobTitle: string): Promise<StartChatResponse> {
+    return request<StartChatResponse>("/chat", {
+      method: "POST",
+      body: JSON.stringify({ jobTitle }),
+    });
+  },
+
+  sendMessage(chatId: string, message: string): Promise<ContinueChatResponse> {
+    return request<ContinueChatResponse>(`/chat/${chatId}/new-message`, {
+      method: "POST",
+      body: JSON.stringify({ message }),
+    });
+  },
+};
+
 // ── Auth API ──
 
 export const authApi = {

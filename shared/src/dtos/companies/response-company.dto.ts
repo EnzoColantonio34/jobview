@@ -1,4 +1,4 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { InterviewResponseDto } from '../interviews/response-interview.dto';
 
 /**
@@ -9,7 +9,8 @@ import { InterviewResponseDto } from '../interviews/response-interview.dto';
  */
 export class CompanyResponseDto {
     @Expose()
-    companyId: string;
+    @Transform(({ obj }) => obj.id, { toClassOnly: true })
+    companyId: number;
 
     @Expose()
     name: string;
@@ -18,13 +19,13 @@ export class CompanyResponseDto {
     city: string;
 
     @Expose()
-    zipCode: number;
+    zipCode: string;
 
     @Expose()
-    adress: string;
+    address: string;
 
     @Expose()
-    adressExtra: string;
+    addressExtra: string;
 
     @Expose()
     email: string;

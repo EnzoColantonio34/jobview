@@ -96,9 +96,10 @@
   },
   "chat": {
     "welcomeTitle": "Prêt pour votre entretien ?",
-    "welcomeDescription": "Expliquez-moi le contexte de votre entretien et je vous poserai des questions pour vous aider à vous préparer.",
-    "firstInputPlaceholder": "Envoyez votre réponse...",
-    "inputPlaceholder": "Votre réponse..."
+    "welcomeDescription": "Indiquez le poste pour lequel vous voulez vous entraîner et je démarrerai l'entretien.",
+    "firstInputPlaceholder": "Pour quel poste voulez-vous vous entraîner ?",
+    "inputPlaceholder": "Votre réponse...",
+    "error": "Une erreur est survenue. Veuillez réessayer."
   },
   "calendar": {
     "daysOfWeek": {

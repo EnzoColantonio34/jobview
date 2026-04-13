@@ -1,12 +1,20 @@
+import type { CompanyResponse } from "@/lib/api-client"
+
 export type CompanyStatus = "contacted" | "interview" | "rejected" | "offer"
 
-export interface Company {
-  id: string
-  name: string
-  website: string
-  position: string
-  contactDate: string
-  status: CompanyStatus
+export function deriveCompanyStatus(company: CompanyResponse): CompanyStatus {
+  const interviews = company.interviews ?? []
+
+  if (interviews.some((i) => i.state && /offer|offre|accept/i.test(i.state))) {
+    return "offer"
+  }
+  if (interviews.some((i) => i.state && /reject|refus|declin/i.test(i.state))) {
+    return "rejected"
+  }
+  if (interviews.some((i) => !!i.interviewDate)) {
+    return "interview"
+  }
+  return "contacted"
 }
 
 export function getStatusColor(status: CompanyStatus): string {
@@ -34,6 +42,28 @@ export function getStatusLabelKey(status: CompanyStatus) {
   return COMPANY_STATUS_LABEL_KEYS[status]
 }
 
-export function filterCompaniesByName(companies: Company[], searchTerm: string): Company[] {
-  return companies.filter((company) => company.name.toLowerCase().includes(searchTerm.toLowerCase()))
+export function filterCompanies(
+  companies: CompanyResponse[],
+  searchTerm: string,
+): CompanyResponse[] {
+  const term = searchTerm.trim().toLowerCase()
+  if (!term) return companies
+  return companies.filter((c) => {
+    const haystack = [c.name, c.email ?? "", c.city ?? ""]
+      .join(" ")
+      .toLowerCase()
+    return haystack.includes(term)
+  })
+}
+
+export function formatContactDate(iso: string): string {
+  try {
+    return new Date(iso).toLocaleDateString("fr-FR", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+  } catch {
+    return iso
+  }
 }
